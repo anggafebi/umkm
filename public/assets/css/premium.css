@@ -355,3 +355,126 @@ transition:.25s
  .grid-three{grid-template-columns:1fr}
  .modern-section{padding:45px 15px}
 }
+
+
+/* Mobile Friendly Upgrade */
+*{
+    box-sizing:border-box;
+}
+html{
+    scroll-behavior:smooth;
+}
+body{
+    overflow-x:hidden;
+}
+.header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+.navbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+}
+.mobile-menu-btn{
+    display:none;
+    background:none;
+    border:0;
+    font-size:28px;
+    cursor:pointer;
+}
+img{
+    max-width:100%;
+    height:auto;
+}
+section{
+    width:100%;
+}
+.container,
+.consultation-container,
+.service-container,
+.portfolio-container{
+    width:min(1120px,92%);
+    margin:auto;
+}
+
+@media(max-width:768px){
+
+    .navbar{
+        padding:14px 20px;
+    }
+
+    .mobile-menu-btn{
+        display:block;
+    }
+
+    .nav-links{
+        position:absolute;
+        top:70px;
+        left:0;
+        width:100%;
+        background:#fff;
+        padding:20px;
+        display:flex;
+        flex-direction:column;
+        gap:14px;
+        box-shadow:0 10px 25px rgba(0,0,0,.08);
+        transform:translateY(-150%);
+        opacity:0;
+        transition:.3s ease;
+    }
+
+    .nav-links.active{
+        transform:translateY(0);
+        opacity:1;
+    }
+
+    .brand{
+        font-size:18px;
+    }
+
+    h1{
+        font-size:32px!important;
+        line-height:1.2;
+    }
+
+    h2{
+        font-size:24px!important;
+    }
+
+    p{
+        font-size:15px;
+        line-height:1.7;
+    }
+
+    .service-grid,
+    .portfolio-grid,
+    .consultation-grid{
+        grid-template-columns:1fr!important;
+    }
+
+    .card,
+    .service-card,
+    .portfolio-card,
+    .consultation-card{
+        padding:22px!important;
+        border-radius:18px;
+    }
+
+    .hero{
+        padding:50px 20px!important;
+    }
+
+    .footer{
+        padding:30px 20px;
+        text-align:center;
+    }
+
+    .whatsapp-floating{
+        bottom:20px;
+        right:20px;
+        padding:12px 18px;
+    }
+}

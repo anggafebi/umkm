@@ -14,3 +14,20 @@ document.addEventListener('DOMContentLoaded',()=>{
    el.classList.add('fade-up'); observer.observe(el);
  });
 });
+
+document.addEventListener("DOMContentLoaded", function(){
+    const btn=document.querySelector(".mobile-menu-btn");
+    const menu=document.querySelector(".nav-links");
+
+    if(btn && menu){
+        btn.addEventListener("click", function(){
+            menu.classList.toggle("active");
+        });
+
+        document.querySelectorAll(".nav-links a").forEach(link=>{
+            link.addEventListener("click",()=>{
+                menu.classList.remove("active");
+            });
+        });
+    }
+});

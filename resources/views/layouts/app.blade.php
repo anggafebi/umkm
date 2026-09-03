@@ -11,11 +11,13 @@
 <header class="header">
 <nav class="navbar">
 <div class="brand">Aditech Multisolusi <span></span></div>
+<button class="mobile-menu-btn" aria-label="Menu">☰</button>
 <div class="nav-links">
 <a href="/">Home</a>
 <a href="/layanan">Layanan</a>
 <a href="/portfolio">Portfolio</a>
 <a href="/tentang-kami">Tentang</a>
+<a href="/produk">Produk</a>
 <a href="/kontak">Kontak</a>
 <a class="nav-cta" href="/konsultasi">Konsultasi</a>
 </div>

@@ -4,7 +4,30 @@
 *{box-sizing:border-box}
 body{margin:0;font-family:Inter,Arial,sans-serif;color:#172033;background:#fff}
 a{text-decoration:none;color:inherit}
-.header{position:sticky;top:0;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-bottom:1px solid #e8edf5;z-index:10}
+.header{
+    position:sticky;
+    top:0;
+
+    background:white;
+
+    border-bottom:1px solid #e8edf5;
+
+    z-index:1000;
+
+    transition:.3s ease;
+}
+
+
+.header.scrolled{
+
+    background:rgba(255,255,255,0.65);
+
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+
+    box-shadow:0 10px 30px rgba(15,23,42,.08);
+
+}
 .navbar{max-width:1200px;margin:auto;padding:18px 24px;display:flex;justify-content:space-between;align-items:center}
 .brand{font-size:25px;font-weight:800}.brand span{color:#2563eb}
 .nav-links{display:flex;gap:25px;align-items:center}
@@ -268,8 +291,21 @@ a{text-decoration:none;color:inherit}
 
 /* Modern UX Upgrade */
 body{overflow-x:hidden}
-.header{transition:.3s}
-.header.scrolled{box-shadow:0 10px 30px rgba(15,23,42,.08)}
+.header{
+    transition:.3s ease;
+}
+
+
+.header.scrolled{
+
+    background:rgba(255,255,255,0.65);
+
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+
+    box-shadow:0 10px 30px rgba(15,23,42,.08);
+
+}
 .section{max-width:1200px;margin:auto;padding:80px 24px}
 .card{
  background:#fff;

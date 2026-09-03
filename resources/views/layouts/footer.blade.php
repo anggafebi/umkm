@@ -1,7 +1,7 @@
 <footer class="footer">
 <div class="container grid-three">
 <div>
-<h3>Aditech.</h3>
+<h3>Aditech Multisolusi</h3>
 <p>Solusi digital untuk pertumbuhan bisnis UMKM.</p>
 </div>
 <div>

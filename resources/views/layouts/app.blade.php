@@ -10,7 +10,7 @@
 <body>
 <header class="header">
 <nav class="navbar">
-<div class="brand">Aditech<span>.</span></div>
+<div class="brand">Aditech Multisolusi <span></span></div>
 <div class="nav-links">
 <a href="/">Home</a>
 <a href="/layanan">Layanan</a>
@@ -22,10 +22,11 @@
 </nav>
 </header>
 <main>@yield('content')</main>
-<a href="https://wa.me/628000000000?text=Halo%20Aditech,%20saya%20ingin%20konsultasi%20website" class="whatsapp-floating">WhatsApp</a>
+<a href="https://wa.me/6287848127894?text=Halo%20Aditech,%20saya%20ingin%20konsultasi%20website" class="whatsapp-floating">WhatsApp</a>
 <footer class="footer">
 <p>Aditech Multisolusi UMKM</p>
 <p>Solusi digital untuk pertumbuhan bisnis</p>
 </footer>
+<script src="{{ asset('assets/js/app.js') }}"></script>
 </body>
 </html>

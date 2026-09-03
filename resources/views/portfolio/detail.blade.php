@@ -7,6 +7,8 @@
 <section class="portfolio-detail">
     <div class="portfolio-container">
 
+        <div class="detail-back-wrapper"><a href="{{ url('/portfolio') }}" class="detail-back-btn">← Kembali ke Portfolio</a></div>
+
         <div class="portfolio-hero-card">
             <span class="portfolio-badge">Portfolio Project</span>
             <h1>{{ $item->title }}</h1>

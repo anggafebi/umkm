@@ -3,6 +3,8 @@
 @section('content')
 <section class="service-detail-page">
 <div class="service-detail-container">
+<div class="detail-back-wrapper"><a href="{{ url('/layanan') }}" class="detail-back-btn">← Kembali ke Layanan</a></div>
+
 <div class="service-hero-card">
 <span class="service-label">Layanan Digital UMKM</span>
 <h1>{{ $service->name }}</h1>

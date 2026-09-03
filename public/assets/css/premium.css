@@ -326,3 +326,32 @@ transition:.25s
     color:white;
     transform:translateX(-3px);
 }
+
+
+/* Final business presentation upgrade */
+.modern-section{padding:70px 20px}
+.soft{background:#f8fafc}
+.about-card,.stat-card,.card{
+    border-radius:22px;
+    background:#fff;
+    padding:28px;
+    box-shadow:0 12px 35px rgba(15,23,42,.08);
+    transition:.3s ease;
+}
+.about-card:hover,.stat-card:hover,.card:hover{
+    transform:translateY(-6px);
+}
+.grid-three{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:25px;
+}
+.clean-list{padding-left:20px}
+.detail-back-btn{
+    display:inline-flex;
+    margin-bottom:25px;
+}
+@media(max-width:768px){
+ .grid-three{grid-template-columns:1fr}
+ .modern-section{padding:45px 15px}
+}

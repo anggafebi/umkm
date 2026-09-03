@@ -35,4 +35,26 @@
 </div>
 </section>
 
+
+<section class="modern-section">
+<div class="container about-grid">
+<div class="about-card">
+<h2>Tim & Pengalaman</h2>
+<p>
+Tim Aditech berfokus membantu UMKM membangun kehadiran digital melalui
+website profesional, katalog layanan, dan sistem bisnis yang mudah digunakan.
+</p>
+</div>
+<div class="about-card">
+<h2>Cara Kami Bekerja</h2>
+<ul class="clean-list">
+<li>Konsultasi kebutuhan bisnis</li>
+<li>Analisis solusi digital</li>
+<li>Development dan pengujian</li>
+<li>Launching dan pendampingan</li>
+</ul>
+</div>
+</div>
+</section>
+
 @endsection

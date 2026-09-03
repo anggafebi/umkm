@@ -12,9 +12,9 @@
 </div>
 <div>
 <h3>Kontak</h3>
-<p>WhatsApp: 08000000000</p>
+<p>WhatsApp: 087848127894</p>
 <p>Email: info@aditech.id</p>
 </div>
 </div>
-<p style="margin-top:35px">© {{ date('Y') }} Aditech Multisolusi UMKM</p>
+<p style="margin-top:35px">© {{ date('Y') }} Aditech Multisolusi</p>
 </footer>

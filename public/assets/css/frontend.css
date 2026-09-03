@@ -1,0 +1,48 @@
+body{
+    font-family: Arial, sans-serif;
+    margin:0;
+    color:#222;
+}
+
+header{
+    padding:20px;
+    border-bottom:1px solid #ddd;
+}
+
+nav a{
+    margin-right:20px;
+    text-decoration:none;
+}
+
+.hero{
+    padding:80px 20px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.grid div{
+    padding:30px;
+    border:1px solid #ddd;
+}
+
+.cta{
+    padding:60px 20px;
+}
+
+
+@media(max-width:768px){
+
+.grid{
+    grid-template-columns:1fr;
+}
+
+nav a{
+    display:block;
+    margin:10px 0;
+}
+
+}

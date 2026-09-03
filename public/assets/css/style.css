@@ -1,0 +1,23 @@
+/* Disccloud Main Style */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+.container {
+    width: 90%;
+    margin: auto;
+}
+
+.btn-primary {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.card {
+    padding: 20px;
+    border-radius: 12px;
+}

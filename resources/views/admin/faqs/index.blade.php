@@ -1,0 +1,1 @@
+<h1>CMS faqs</h1><p>Tambahkan data melalui form admin.</p>

@@ -17,3 +17,7 @@ Route::prefix('admin')->group(function(){
         ->only(['index','store','destroy']);
 
 });
+use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\PricingPackageController;
+Route::prefix('admin')->group(function(){ Route::resource('testimonials', TestimonialController::class)->only(['index','store','destroy']); Route::resource('faqs', FaqController::class)->only(['index','store','destroy']); Route::resource('pricing', PricingPackageController::class)->only(['index','store','destroy']); });

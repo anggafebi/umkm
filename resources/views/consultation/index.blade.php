@@ -1,37 +1,15 @@
 @extends('layouts.app')
-@section('title','Konsultasi Digital')
+@section('title','Konsultasi Digital | '.($siteSettings['site_name'] ?? 'Aditech Multisolusi'))
+@section('description','Diskusikan kebutuhan website, sistem bisnis, dan digitalisasi UMKM bersama tim Aditech.')
 @section('content')
-<section class="page-hero">
-<div class="container">
-<span class="badge">Consultation</span>
-<h1>Konsultasi Kebutuhan Digital</h1>
-<p>Ceritakan kebutuhan bisnis Anda. Kami membantu memilih solusi website dan sistem digital yang sesuai.</p>
-</div>
-</section>
-
-<section class="modern-section consultation-section">
-<div class="container consultation-grid">
-<div class="modern-card">
-<h2>Solusi yang Kami Bantu</h2>
-<ul class="feature-list">
-<li>Website Company Profile</li>
-<li>Website Toko dan Katalog Produk</li>
-<li>Landing Page Promosi</li>
-<li>Sistem Informasi Bisnis</li>
-<li>POS dan Sistem Pendukung Operasional</li>
-</ul>
-</div>
-<div class="modern-card">
-<h2>Form Konsultasi</h2>
-<form method="POST" action="/konsultasi" class="contact-form">
-@csrf
-<input name="name" placeholder="Nama Lengkap">
-<input name="phone" placeholder="WhatsApp">
-<input name="email" placeholder="Email">
-<textarea name="message" placeholder="Jelaskan kebutuhan bisnis Anda"></textarea>
-<button class="nav-cta">Kirim Konsultasi</button>
-</form>
-</div>
-</div>
-</section>
+<section class="page-hero"><div class="container"><span class="section-kicker">KONSULTASI</span><h1>Ceritakan kebutuhan bisnis Anda.</h1><p>Kami membantu memetakan kebutuhan, memilih solusi yang relevan, dan menyusun langkah implementasi yang realistis.</p></div></section>
+<section class="modern-section"><div class="container consultation-grid"><div class="modern-card"><span class="section-kicker">YANG BISA DIBAHAS</span><h2>Mulai dari kebutuhan, bukan dari teknologi.</h2><ul class="feature-list"><li>Website company profile dan landing page</li><li>Katalog produk dan presentasi digital</li><li>Sistem informasi dan dashboard internal</li><li>POS dan dukungan operasional</li><li>Maintenance, SEO, dan pengembangan lanjutan</li></ul><div class="info-box-public"><strong>Respons konsultasi</strong><p>Data Anda akan masuk ke dashboard lead internal dan hanya digunakan untuk menindaklanjuti permintaan konsultasi.</p></div></div><div class="modern-card"><h2>Form Konsultasi</h2>@if(session('success'))<div class="form-success" role="status">{{ session('success') }}</div>@endif @if($errors->any())<div class="form-error" role="alert">Periksa kembali data yang Anda masukkan.</div>@endif<form method="POST" action="{{ route('consultation.store') }}" class="contact-form">@csrf
+<label class="form-field"><span>Nama lengkap *</span><input name="name" value="{{ old('name') }}" autocomplete="name" required>@error('name')<small class="field-error">{{ $message }}</small>@enderror</label>
+<label class="form-field"><span>Nama bisnis / perusahaan</span><input name="business_name" value="{{ old('business_name') }}" autocomplete="organization"></label>
+<label class="form-field"><span>WhatsApp *</span><input name="phone" value="{{ old('phone') }}" inputmode="tel" autocomplete="tel" required>@error('phone')<small class="field-error">{{ $message }}</small>@enderror</label>
+<label class="form-field"><span>Email</span><input type="email" name="email" value="{{ old('email') }}" autocomplete="email">@error('email')<small class="field-error">{{ $message }}</small>@enderror</label>
+<label class="form-field"><span>Kebutuhan</span><select name="service_interest"><option value="">Pilih kebutuhan</option>@foreach(['Website Company Profile','Landing Page','Katalog Digital','Sistem Informasi','POS / Sistem Operasional','Lainnya'] as $option)<option value="{{ $option }}" @selected(old('service_interest')===$option)>{{ $option }}</option>@endforeach</select></label>
+<label class="form-field"><span>Kisaran budget</span><select name="budget"><option value="">Belum ditentukan</option>@foreach(['< Rp 3 juta','Rp 3 - 7 juta','Rp 7 - 15 juta','> Rp 15 juta'] as $option)<option value="{{ $option }}" @selected(old('budget')===$option)>{{ $option }}</option>@endforeach</select></label>
+<label class="form-field"><span>Kebutuhan / target *</span><textarea name="message" rows="6" required>{{ old('message') }}</textarea>@error('message')<small class="field-error">{{ $message }}</small>@enderror</label>
+<p class="form-hint">Dengan mengirim formulir, Anda menyetujui data kontak digunakan untuk menindaklanjuti konsultasi ini.</p><button class="button-primary" type="submit">Kirim Konsultasi</button></form></div></div></section>
 @endsection

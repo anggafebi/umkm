@@ -1,0 +1,25 @@
+/* Refactor visual layer */
+:root{
+ --primary:#2563eb;
+ --surface:#ffffff;
+ --text:#172033;
+ --muted:#64748b;
+ --border:#e2e8f0;
+ --radius-lg:22px;
+ --shadow-soft:0 18px 45px rgba(15,23,42,.08);
+}
+html[data-theme="dark"]{
+ --surface:#111827;
+ --text:#f8fafc;
+ --muted:#94a3b8;
+ --border:#334155;
+}
+body{color:var(--text);background:var(--surface);-webkit-font-smoothing:antialiased;}
+.card,.service-card,.feature-card{border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-soft);transition:.25s ease;}
+.card:hover,.service-card:hover,.feature-card:hover{transform:translateY(-5px);}
+button,.btn,.cta{border-radius:999px!important;}
+img{max-width:100%;}
+@media(max-width:768px){
+ .hero,.hero-section{padding-left:20px!important;padding-right:20px!important;}
+ h1{font-size:clamp(2rem,9vw,3.5rem)!important;}
+}

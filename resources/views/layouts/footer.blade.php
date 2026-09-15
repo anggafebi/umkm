@@ -1,20 +1,9 @@
-<footer class="footer">
-    <div class="container grid-three">
-    <div>
-        <h3>Aditech Multisolusi</h3>
-        <p>Solusi website, sistem informasi, dan digitalisasi bisnis untuk UMKM.</p>
-    </div>
-    <div>
-        <h3>Layanan</h3>
-        <p>Website Company Profile</p>
-        <p>Sistem Informasi</p>
-        <p>Maintenance Website</p>
-    </div>
-    <div>
-        <h3>Kontak</h3>
-        <p>WhatsApp: 087848127894</p>
-        <p>Email: info@aditech.id</p>
-    </div>
-    </div>
-        <p style="margin-top:35px;text-align:center">© {{ date('Y') }} Aditech Multisolusi</p>
+<footer class="footer-premium">
+<div class="container footer-grid">
+<div class="footer-brand"><a href="{{ route('home') }}" class="brand"><img src="{{ \App\Support\Media::url($siteSettings['logo_path'] ?? null, 'images/logo.png') }}" class="logo" alt="" width="38" height="38"><span>{{ $siteSettings['site_name'] ?? 'Aditech Multisolusi' }}</span></a><p>{{ $siteSettings['tagline'] ?? 'Partner digital UMKM untuk website dan sistem bisnis yang profesional.' }}</p></div>
+<div><h3>Solusi</h3><a href="{{ route('services.index') }}">Layanan Digital</a><a href="{{ route('products.index') }}">Produk</a><a href="{{ route('portfolio.index') }}">Portfolio</a><a href="{{ route('blog.index') }}">Insight</a></div>
+<div><h3>Perusahaan</h3><a href="{{ route('about') }}">Tentang Kami</a><a href="{{ route('contact') }}">Kontak</a><a href="{{ route('consultation') }}">Konsultasi</a><a href="{{ route('login') }}">Admin</a></div>
+<div><h3>Hubungi</h3><p>{{ $siteSettings['phone'] ?? '087848127894' }}</p><p>{{ $siteSettings['email'] ?? 'info@aditech.id' }}</p><p>{{ $siteSettings['location'] ?? 'Indonesia' }}</p><div class="social-row">@foreach(['instagram'=>'IG','linkedin'=>'IN','facebook'=>'FB'] as $key=>$label) @if(!empty($siteSettings[$key]))<a href="{{ $siteSettings[$key] }}" target="_blank" rel="noopener noreferrer" aria-label="{{ ucfirst($key) }}">{{ $label }}</a>@endif @endforeach</div></div>
+<div class="newsletter-box"><strong>Dapatkan insight digital</strong><form method="POST" action="{{ route('newsletter.store') }}">@csrf<label class="sr-only" for="newsletterEmail">Email newsletter</label><input id="newsletterEmail" type="email" name="email" placeholder="email@bisnis.com" autocomplete="email" required><button type="submit">Daftar</button></form>@if(session('newsletter_success'))<small role="status">{{ session('newsletter_success') }}</small>@endif</div></div>
+<div class="container footer-bottom"><span>© {{ date('Y') }} {{ $siteSettings['site_name'] ?? 'Aditech Multisolusi' }}. All rights reserved.</span><span>Solusi digital yang dirancang untuk bisnis.</span></div>
 </footer>

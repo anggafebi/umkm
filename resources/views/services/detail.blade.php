@@ -1,54 +1,6 @@
 @extends('layouts.app')
-
+@section('title',$service->name.' | Layanan')
+@section('description',$service->short_description ?: \Illuminate\Support\Str::limit($service->description,155))
 @section('content')
-<section class="service-detail-page">
-<div class="service-detail-container">
-<div class="detail-back-wrapper"><a href="{{ url('/layanan') }}" class="detail-back-btn">← Kembali ke Layanan</a></div>
-
-<div class="service-hero-card">
-<span class="service-label">Layanan Digital UMKM</span>
-<h1>{{ $service->name }}</h1>
-<p>{{ $service->description }}</p>
-<a href="/konsultasi" class="service-cta">Konsultasi Sekarang</a>
-</div>
-
-<div class="service-section-grid">
-<div class="service-info-card">
-<h2>Target Pengguna</h2>
-<p>UMKM, perusahaan, dan bisnis yang membutuhkan solusi digital untuk meningkatkan kredibilitas dan operasional.</p>
-</div>
-<div class="service-info-card">
-<h2>Masalah Yang Diselesaikan</h2>
-<ul>
-<li>Pengelolaan bisnis masih manual.</li>
-<li>Informasi bisnis belum tersampaikan dengan baik.</li>
-<li>Belum memiliki sistem digital.</li>
-</ul>
-</div>
-</div>
-
-<div class="service-content-card">
-<h2>Fitur Utama</h2>
-<div class="feature-grid">
-<div class="feature-item">Responsive Design</div>
-<div class="feature-item">SEO Basic</div>
-<div class="feature-item">Integrasi WhatsApp</div>
-<div class="feature-item">Manajemen Konten</div>
-</div>
-</div>
-
-<div class="service-content-card">
-<h2>Teknologi</h2>
-<div class="technology-list">
-<span>Laravel</span><span>MySQL</span><span>HTML</span><span>CSS</span><span>JavaScript</span>
-</div>
-</div>
-
-<div class="service-bottom-cta">
-<h2>Siap Mengembangkan Bisnis Digital Anda?</h2>
-<p>Konsultasikan kebutuhan website atau sistem bisnis Anda bersama kami.</p>
-<a href="/konsultasi">Mulai Konsultasi</a>
-</div>
-</div>
-</section>
+<section class="service-detail-page"><div class="service-detail-container"><a href="{{ route('services.index') }}" class="detail-back-btn">← Kembali ke Layanan</a><div class="service-hero-card"><span class="service-label">Layanan Digital UMKM</span><h1>{{ $service->name }}</h1><p>{{ $service->description ?: $service->short_description }}</p><a href="{{ route('consultation') }}" class="service-cta">Konsultasi Sekarang</a></div><div class="service-section-grid"><div class="service-info-card"><h2>Target Pengguna</h2><p>{{ $service->target_user ?: 'UMKM dan bisnis yang membutuhkan solusi digital yang lebih profesional dan mudah dikelola.' }}</p></div><div class="service-info-card"><h2>Masalah yang Diselesaikan</h2><p>{{ $service->problem ?: 'Proses digital yang belum terstruktur, informasi bisnis yang tersebar, atau kebutuhan sistem yang masih dikerjakan secara manual.' }}</p></div></div><div class="service-content-card"><h2>Solusi</h2><p>{{ $service->solution ?: 'Solusi dirancang sesuai kebutuhan, alur pengguna, dan target implementasi bisnis.' }}</p></div><div class="service-content-card"><h2>Fitur Utama</h2><div class="feature-grid">@foreach(array_filter(preg_split('/\r\n|\r|\n|,/',$service->features ?? 'Responsive Design,SEO Basic,Integrasi WhatsApp,Manajemen Konten')) as $feature)<div class="feature-item">{{ trim($feature) }}</div>@endforeach</div></div><div class="service-bottom-cta"><h2>Punya kebutuhan serupa?</h2><p>Diskusikan target dan konteks bisnis Anda bersama kami.</p><a href="{{ route('consultation') }}">Mulai Konsultasi</a></div></div></section>
 @endsection

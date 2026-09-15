@@ -1,0 +1,9 @@
+UMKM Premium Final Version
+Build date: 2026-09-09
+Laravel target: 12.x
+PHP target: 8.2+
+Frontend build tool required: No
+Vendor included: No
+Node modules included: No
+.env included: No
+Runtime cache/log/session included: No

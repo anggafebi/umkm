@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -16,28 +19,37 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email'=>'required|email',
-            'password'=>'required'
+            'email' => ['required', 'email'],
+            'password' => ['required', 'string'],
         ]);
 
-        if(Auth::attempt($credentials)){
-            $request->session()->regenerate();
+        $key = Str::lower($credentials['email']).'|'.$request->ip();
 
-            return redirect('/admin/dashboard');
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
+            throw ValidationException::withMessages([
+                'email' => "Terlalu banyak percobaan login. Coba lagi dalam {$seconds} detik.",
+            ]);
         }
 
-        return back()->withErrors([
-            'email'=>'Email atau password tidak sesuai'
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            RateLimiter::clear($key);
+            $request->session()->regenerate();
+            return redirect()->intended(route('admin.dashboard'));
+        }
+
+        RateLimiter::hit($key, 60);
+
+        throw ValidationException::withMessages([
+            'email' => 'Email atau password tidak sesuai.',
         ]);
     }
 
     public function logout(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
-        return redirect('/login');
+        return redirect()->route('login');
     }
 }

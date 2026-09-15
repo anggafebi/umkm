@@ -2,33 +2,38 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use RuntimeException;
 
 class WhatsAppService
 {
-    public function sendMessage($message)
+    public function sendMessage(string $message): Response
     {
-        if (!env('WHATSAPP_TOKEN') || !env('WHATSAPP_PHONE_ID') || !env('WHATSAPP_NUMBER')) {
-            throw new \Exception('WhatsApp API configuration is incomplete.');
+        $token = config('services.whatsapp.token');
+        $phoneId = config('services.whatsapp.phone_id');
+        $recipient = config('services.whatsapp.number');
+        $version = config('services.whatsapp.graph_version', 'v20.0');
+
+        if (!$token || !$phoneId || !$recipient) {
+            throw new RuntimeException('WhatsApp API configuration is incomplete.');
         }
-        $response = Http::withToken(env('WHATSAPP_TOKEN'))
-            ->post(
-                'https://graph.facebook.com/v20.0/' . env('WHATSAPP_PHONE_ID') . '/messages',
-                [
-                    'messaging_product' => 'whatsapp',
-                    'to' => env('WHATSAPP_NUMBER'),
-                    'type' => 'text',
-                    'text' => [
-                        'body' => $message
-                    ]
-                ]
-            );
+
+        $response = Http::withToken($token)
+            ->timeout(10)
+            ->retry(2, 300, throw: false)
+            ->post("https://graph.facebook.com/{$version}/{$phoneId}/messages", [
+                'messaging_product' => 'whatsapp',
+                'to' => $recipient,
+                'type' => 'text',
+                'text' => ['body' => $message],
+            ]);
 
         if (!$response->successful()) {
             Log::error('WhatsApp API Error', [
                 'status' => $response->status(),
-                'response' => $response->json()
+                'response' => $response->json(),
             ]);
         }
 

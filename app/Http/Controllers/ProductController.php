@@ -25,7 +25,7 @@ $query->where(
 }
 
 
-$products = $query->latest()->get();
+$products = $query->latest()->paginate(12)->withQueryString();
 
 
 return view(

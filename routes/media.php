@@ -1,8 +1,2 @@
 <?php
-
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\MediaUploadController;
-
-Route::post('/admin/media/upload',
-    [MediaUploadController::class,'upload']
-);
+// Media manager lama dipertahankan sebagai file kompatibilitas. Tambahkan route upload di sini jika diperlukan.

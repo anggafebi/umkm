@@ -1,26 +1,12 @@
-<h1>Daftar Konsultasi</h1>
-
-@foreach($consultations as $item)
-
-<div>
-    <h3>{{ $item->name }}</h3>
-    <p>{{ $item->phone }}</p>
-    <p>{{ $item->message }}</p>
-
-    <form method="POST" action="/admin/consultations/{{ $item->id }}">
-        @csrf
-        @method('PUT')
-
-        <select name="status">
-            <option value="new">New</option>
-            <option value="contacted">Contacted</option>
-            <option value="proposal">Proposal</option>
-            <option value="deal">Deal</option>
-            <option value="closed">Closed</option>
-        </select>
-
-        <button>Simpan</button>
-    </form>
-</div>
-
-@endforeach
+@extends('admin.layouts.app')
+@section('title','Leads')
+@section('page_title','Leads & Konsultasi')
+@section('content')
+<div class="page-actions"><form class="filter-form" method="GET"><input name="q" value="{{ request('q') }}" placeholder="Cari nama, bisnis, telepon"><select name="status"><option value="">Semua status</option>@foreach(['new'=>'New','contacted'=>'Contacted','follow_up'=>'Follow Up','deal'=>'Deal','closed'=>'Closed'] as $k=>$v)<option value="{{ $k }}" @selected(request('status')===$k)>{{ $v }}</option>@endforeach</select><button class="secondary-button">Filter</button></form><a class="primary-button" href="{{ route('admin.consultations.export') }}">Export CSV</a></div>
+<div class="panel"><div class="table-wrap"><table class="admin-table"><thead><tr><th>Prospek</th><th>Kebutuhan</th><th>Status</th><th>Masuk</th><th>Aksi</th></tr></thead><tbody>
+@forelse($consultations as $lead)
+<tr><td><strong>{{ $lead->name }}</strong><small>{{ $lead->business_name ?: 'Tanpa nama bisnis' }} · {{ $lead->phone }}</small></td><td>{{ $lead->service_interest ?: '-' }}<small>{{ \Illuminate\Support\Str::limit($lead->message,70) }}</small></td><td><span class="status {{ $lead->status }}">{{ ucwords(str_replace('_',' ',$lead->status)) }}</span></td><td>{{ $lead->created_at->format('d M Y H:i') }}</td><td><button class="small-button" type="button" data-modal-open="lead-{{ $lead->id }}">Kelola</button></td></tr>
+<div class="modal" id="lead-{{ $lead->id }}"><div class="modal-card"><button class="modal-close" data-modal-close>×</button><h2>{{ $lead->name }}</h2><p>{{ $lead->email ?: '-' }} · {{ $lead->phone }}</p><div class="info-box"><strong>Pesan</strong><p>{{ $lead->message ?: 'Tidak ada pesan.' }}</p></div><form method="POST" action="{{ route('admin.consultations.update',$lead) }}">@csrf @method('PUT')<label>Status</label><select name="status">@foreach(['new'=>'New','contacted'=>'Contacted','follow_up'=>'Follow Up','deal'=>'Deal','closed'=>'Closed'] as $k=>$v)<option value="{{ $k }}" @selected($lead->status===$k)>{{ $v }}</option>@endforeach</select><label>Catatan Admin</label><textarea name="admin_notes" rows="5">{{ $lead->admin_notes }}</textarea><button class="primary-button">Simpan Perubahan</button></form></div></div>
+@empty<tr><td colspan="5">Tidak ada data.</td></tr>@endforelse
+</tbody></table></div><div class="pagination"><x-pagination :paginator="$consultations" /></div></div>
+@endsection

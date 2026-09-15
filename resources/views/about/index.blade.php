@@ -1,60 +1,8 @@
 @extends('layouts.app')
-@section('title','Tentang Kami')
+@section('title','Tentang Kami | '.($siteSettings['site_name'] ?? 'Aditech Multisolusi'))
 @section('content')
-
-<section class="about-hero">
-<div class="container">
-<h1>Tentang Aditech</h1>
-<p>Partner digital UMKM untuk membangun website profesional dan sistem bisnis yang mudah digunakan.</p>
-</div>
-</section>
-
-<section class="modern-section">
-<div class="container about-grid">
-<div class="about-card">
-<h2>Profil Perusahaan</h2>
-<p>Kami membantu UMKM melakukan transformasi digital melalui website company profile, katalog produk, landing page, dan sistem pendukung bisnis.</p>
-</div>
-
-<div class="about-card">
-<h2>Visi & Nilai</h2>
-<ul class="clean-list">
-<li>Memberikan solusi digital sesuai kebutuhan bisnis.</li>
-<li>Mengutamakan desain profesional dan mudah digunakan.</li>
-<li>Mendampingi proses dari konsultasi hingga launching.</li>
-</ul>
-</div>
-</div>
-</section>
-
-<section class="modern-section soft">
-<div class="container grid-three">
-<div class="stat-card"><strong>7+</strong><span>Layanan Digital</span></div>
-<div class="stat-card"><strong>2+</strong><span>Portfolio Website</span></div>
-<div class="stat-card"><strong>100%</strong><span>Fokus UMKM</span></div>
-</div>
-</section>
-
-
-<section class="modern-section">
-<div class="container about-grid">
-<div class="about-card">
-<h2>Tim & Pengalaman</h2>
-<p>
-Tim Aditech berfokus membantu UMKM membangun kehadiran digital melalui
-website profesional, katalog layanan, dan sistem bisnis yang mudah digunakan.
-</p>
-</div>
-<div class="about-card">
-<h2>Cara Kami Bekerja</h2>
-<ul class="clean-list">
-<li>Konsultasi kebutuhan bisnis</li>
-<li>Analisis solusi digital</li>
-<li>Development dan pengujian</li>
-<li>Launching dan pendampingan</li>
-</ul>
-</div>
-</div>
-</section>
-
+<section class="page-hero"><div class="container"><span class="section-kicker">TENTANG KAMI</span><h1>{{ $siteSettings['about_title'] ?? 'Partner digital untuk bisnis yang ingin bergerak lebih terstruktur.' }}</h1><p>{{ $siteSettings['about_description'] ?? ($siteSettings['tagline'] ?? 'Kami membantu UMKM membangun website profesional dan sistem bisnis yang mudah digunakan.') }}</p></div></section>
+<section class="modern-section"><div class="container about-grid"><article class="about-card"><span class="section-kicker">PROFIL</span><h2>Berangkat dari kebutuhan bisnis.</h2><p>Kami membantu UMKM dan bisnis berkembang membangun kehadiran digital melalui website company profile, katalog produk, landing page, serta sistem pendukung operasional yang dapat dikembangkan bertahap.</p></article><article class="about-card"><span class="section-kicker">PRINSIP</span><h2>Praktis, profesional, dan berkelanjutan.</h2><ul class="clean-list"><li>Solusi disesuaikan dengan kebutuhan dan prioritas bisnis.</li><li>Desain mengutamakan kejelasan, kredibilitas, dan kemudahan penggunaan.</li><li>Implementasi dilengkapi ruang pengembangan dan pendampingan.</li></ul></article></div></section>
+<section class="modern-section soft"><div class="container grid-three"><div class="stat-card"><strong>{{ $siteSettings['stat_projects'] ?? '50+' }}</strong><span>Project & implementasi</span></div><div class="stat-card"><strong>{{ $siteSettings['stat_satisfaction'] ?? '98%' }}</strong><span>Orientasi kepuasan client</span></div><div class="stat-card"><strong>UMKM</strong><span>Fokus solusi bisnis digital</span></div></div></section>
+<section class="modern-section"><div class="container about-grid"><article class="about-card"><h2>Cara Kami Bekerja</h2><p>Proses dimulai dari discovery kebutuhan, dilanjutkan strategi dan desain, development, pengujian, lalu launching dan evaluasi. Pendekatan ini menjaga solusi tetap relevan terhadap masalah yang ingin diselesaikan.</p></article><article class="about-card"><h2>Kapabilitas</h2><div class="tech-chips"><i>Laravel</i><i>MySQL</i><i>Responsive Web</i><i>CMS</i><i>SEO</i><i>Business System</i></div></article></div></section>
 @endsection

@@ -1,39 +1,7 @@
 @extends('layouts.app')
-
+@section('title','Portfolio | '.($siteSettings['site_name'] ?? 'Aditech Multisolusi'))
+@section('description','Project website, sistem informasi, dan solusi digital yang dikembangkan untuk kebutuhan bisnis.')
 @section('content')
-
-<section class="page-hero">
-    <div class="container">
-        <span class="badge">Portfolio</span>
-        <h1>Project Digital Kami</h1>
-        <p>Kumpulan solusi digital yang kami kembangkan untuk membantu bisnis mengelola dan meningkatkan kehadiran online.</p>
-    </div>
-</section>
-
-<section class="modern-section">
-    <div class="container">
-        <div class="portfolio-grid-modern">
-            @foreach($portfolio as $item)
-            <div class="portfolio-card">
-                <div class="portfolio-image">
-                    <div class="portfolio-placeholder">{{ strtoupper(substr($item->title,0,1)) }}</div>
-                </div>
-                <div class="portfolio-content">
-                    <span class="portfolio-tag">Digital Solution</span>
-                    <h3>{{ $item->title }}</h3>
-                    <p>{{ $item->description }}</p><small>Fitur: Responsive Design, WhatsApp Integration, Digital Catalog</small>
-                    <a class="portfolio-button" href="/portfolio/{{ $item->slug }}">Lihat Detail</a>
-                </div>
-            </div>
-            @endforeach
-        </div>
-    </div>
-</section>
-
-<section class="cta">
-    <h2>Punya ide bisnis digital?</h2>
-    <p>Konsultasikan kebutuhan website dan sistem bisnis Anda bersama kami.</p>
-    <a href="/konsultasi">Konsultasi Sekarang</a>
-</section>
-
+<section class="page-hero"><div class="container"><span class="section-kicker">PORTFOLIO</span><h1>Project digital yang dibangun untuk kebutuhan nyata.</h1><p>Kumpulan implementasi website dan sistem bisnis dengan fokus pada usability, kredibilitas, dan pengembangan berkelanjutan.</p></div></section>
+<section class="modern-section"><div class="container"><div class="portfolio-showcase">@forelse($portfolio as $item)<article class="portfolio-premium-card"><div class="portfolio-media">@if($item->image)<img loading="lazy" decoding="async" src="{{ \App\Support\Media::url($item->image, 'images/placeholder.svg') }}" alt="{{ $item->title }}">@else<div class="project-placeholder">{{ strtoupper(substr($item->title,0,1)) }}</div>@endif</div><div class="portfolio-meta"><span>{{ $item->category ?: 'Digital Solution' }}</span><h3>{{ $item->title }}</h3><p>{{ \Illuminate\Support\Str::limit($item->description,150) }}</p><div class="tech-chips">@foreach(array_filter(preg_split('/[,\n]+/',$item->technology ?? 'Laravel,Responsive')) as $tech)<i>{{ trim($tech) }}</i>@endforeach</div><a href="{{ route('portfolio.show',$item->slug) }}">Lihat studi kasus →</a></div></article>@empty<div class="empty-state-public">Portfolio belum tersedia.</div>@endforelse</div><x-pagination :paginator="$portfolio" /></div></section><section class="cta-premium"><div class="container"><span>PROJECT BARU</span><h2>Punya ide yang ingin diwujudkan?</h2><p>Diskusikan kebutuhan dan ruang lingkupnya bersama kami.</p><div><a class="button-light" href="{{ route('consultation') }}">Konsultasi Sekarang</a></div></div></section>
 @endsection

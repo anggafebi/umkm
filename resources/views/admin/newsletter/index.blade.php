@@ -1,0 +1,5 @@
+@extends('admin.layouts.app')
+@section('title','Newsletter') @section('page_title','Newsletter Subscribers')
+@section('content')
+<div class="page-actions"><div><h1 class="content-title">Newsletter</h1><p class="muted">Daftar email yang mendaftar melalui website.</p></div><a class="primary-button" href="{{ route('admin.newsletter.export') }}">Export CSV</a></div><div class="panel"><div class="table-wrap"><table class="admin-table"><thead><tr><th>Email</th><th>Status</th><th>Source</th><th>Tanggal</th><th></th></tr></thead><tbody>@forelse($subscribers as $item)<tr><td><strong>{{ $item->email }}</strong></td><td><span class="status deal">{{ $item->status }}</span></td><td>{{ $item->source }}</td><td>{{ $item->created_at->format('d M Y') }}</td><td><form method="POST" action="{{ route('admin.newsletter.destroy',$item) }}" onsubmit="return confirm('Hapus subscriber?')">@csrf @method('DELETE')<button class="danger-button">Hapus</button></form></td></tr>@empty<tr><td colspan="5">Belum ada subscriber.</td></tr>@endforelse</tbody></table></div><div class="pagination"><x-pagination :paginator="$subscribers" /></div></div>
+@endsection

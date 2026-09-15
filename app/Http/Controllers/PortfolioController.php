@@ -8,7 +8,7 @@ class PortfolioController extends Controller
 {
     public function index()
     {
-        $portfolio = Portfolio::latest()->get();
+        $portfolio = Portfolio::latest()->paginate(12);
 
         return view(
             'portfolio.index',

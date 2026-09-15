@@ -1,32 +1,7 @@
 @extends('layouts.app')
-@section('title','Layanan Kami')
+@section('title','Layanan | '.($siteSettings['site_name'] ?? 'Aditech Multisolusi'))
+@section('description','Layanan website, sistem informasi, dan digitalisasi bisnis untuk UMKM.')
 @section('content')
-<section class="page-hero">
-<div class="container">
-<span class="badge">Digital Solution</span>
-<h1>Layanan Digital Untuk UMKM</h1>
-<p>Kami membantu bisnis membangun identitas digital melalui website, sistem informasi, dan solusi teknologi yang sesuai kebutuhan.</p>
-</div>
-</section>
-
-<section class="modern-section">
-<div class="container">
-<div class="grid-three">
-@foreach($services as $service)
-<div class="modern-card service-card">
-<div class="service-icon">◎</div>
-<h2>{{ $service->name }}</h2>
-<p>{{ $service->description }}</p>
-<a class="nav-cta" href="/layanan/{{ $service->slug }}">Lihat Detail</a>
-</div>
-@endforeach
-</div>
-</div>
-</section>
-
-<section class="cta">
-<h2>Butuh solusi digital khusus?</h2>
-<p>Konsultasikan kebutuhan bisnis Anda bersama tim Aditech.</p>
-<a href="/konsultasi">Mulai Konsultasi</a>
-</section>
+<section class="page-hero"><div class="container"><span class="section-kicker">DIGITAL SOLUTION</span><h1>Layanan digital untuk membangun bisnis yang lebih profesional.</h1><p>Dari presence online hingga sistem operasional, setiap layanan dapat disesuaikan dengan kebutuhan dan tahap pertumbuhan bisnis.</p></div></section>
+<section class="modern-section"><div class="container"><div class="service-grid-modern">@forelse($services as $service)<article class="service-card-modern"><div class="service-icon-modern">{{ str_pad($loop->iteration,2,'0',STR_PAD_LEFT) }}</div><h3>{{ $service->name }}</h3><p>{{ $service->short_description ?: \Illuminate\Support\Str::limit($service->description,150) }}</p><a href="{{ route('services.show',$service->slug) }}">Lihat detail →</a></article>@empty<div class="empty-state-public">Layanan belum tersedia.</div>@endforelse</div><x-pagination :paginator="$services" /></div></section><section class="cta-premium"><div class="container"><span>CUSTOM SOLUTION</span><h2>Butuh solusi yang tidak ada di daftar?</h2><p>Kami dapat memetakan kebutuhan dan merancang solusi khusus.</p><div><a class="button-light" href="{{ route('consultation') }}">Mulai Konsultasi</a></div></div></section>
 @endsection

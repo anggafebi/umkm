@@ -1,21 +1,44 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\ConsultationController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\MediaUploadController;
+use App\Http\Controllers\Admin\PortfolioController;
+use App\Http\Controllers\Admin\NewsletterController;
+use App\Http\Controllers\Admin\PricingPackageController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Admin\UserController;
 
-Route::prefix('admin')->group(function(){
-
-    Route::get('/dashboard',
-        [DashboardController::class,'index']
-    );
-
-    Route::get('/consultations',
-        [ConsultationController::class,'index']
-    );
-
-    Route::put('/consultations/{id}',
-        [ConsultationController::class,'update']
-    );
-
+Route::prefix('admin')->name('admin.')->middleware('admin')->group(function(){
+    Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
+    Route::resource('services',ServiceController::class)->only(['index','store','update','destroy']);
+    Route::resource('products',ProductController::class)->only(['index','store','update','destroy']);
+    Route::resource('portfolio',PortfolioController::class)->only(['index','store','update','destroy']);
+    Route::resource('testimonials',TestimonialController::class)->only(['index','store','update','destroy']);
+    Route::resource('faqs',FaqController::class)->only(['index','store','update','destroy']);
+    Route::resource('pricing',PricingPackageController::class)->only(['index','store','update','destroy']);
+    Route::get('consultations',[ConsultationController::class,'index'])->name('consultations.index');
+    Route::put('consultations/{consultation}',[ConsultationController::class,'update'])->name('consultations.update');
+    Route::get('consultations-export',[ConsultationController::class,'export'])->name('consultations.export');
+    Route::get('blog',[BlogController::class,'index'])->name('blog.index');
+    Route::post('blog',[BlogController::class,'store'])->name('blog.store');
+    Route::put('blog/{post}',[BlogController::class,'update'])->name('blog.update');
+    Route::delete('blog/{post}',[BlogController::class,'destroy'])->name('blog.destroy');
+    Route::post('blog-category',[BlogController::class,'storeCategory'])->name('blog.category.store');
+    Route::get('newsletter',[NewsletterController::class,'index'])->name('newsletter.index');
+    Route::get('newsletter-export',[NewsletterController::class,'export'])->name('newsletter.export');
+    Route::delete('newsletter/{subscriber}',[NewsletterController::class,'destroy'])->name('newsletter.destroy');
+    Route::get('profile',[UserController::class,'profile'])->name('profile.index');
+    Route::put('profile',[UserController::class,'updateProfile'])->name('profile.update');
+    Route::get('media',[MediaUploadController::class,'index'])->name('media.index');
+    Route::post('media',[MediaUploadController::class,'upload'])->name('media.upload');
+    Route::delete('media',[MediaUploadController::class,'destroy'])->name('media.destroy');
+    Route::get('settings',[SettingsController::class,'index'])->name('settings.index');
+    Route::put('settings',[SettingsController::class,'update'])->name('settings.update');
+    Route::resource('users',UserController::class)->only(['index','store','update','destroy']);
 });

@@ -1,63 +1,6 @@
 @extends('layouts.app')
-
-@section('title', $item->title . ' | Portfolio')
-
+@section('title',$item->title.' | Portfolio')
+@section('description',\Illuminate\Support\Str::limit($item->description,155))
 @section('content')
-
-<section class="portfolio-detail">
-    <div class="portfolio-container">
-
-        <div class="detail-back-wrapper"><a href="{{ url('/portfolio') }}" class="detail-back-btn">← Kembali ke Portfolio</a></div>
-
-        <div class="portfolio-hero-card">
-            <span class="portfolio-badge">Portfolio Project</span>
-            <h1>{{ $item->title }}</h1>
-            <p>{{ $item->description }}</p>
-
-            <a href="/konsultasi" class="primary-btn">
-                Konsultasikan Project Anda
-            </a>
-        </div>
-
-        <div class="portfolio-content-grid">
-
-            <div class="portfolio-info-card">
-                <h2>Tentang Project</h2>
-                <p>
-                    Project ini dibuat untuk membantu bisnis memiliki solusi
-                    digital yang lebih profesional, mudah digunakan, dan sesuai
-                    dengan kebutuhan operasional.
-                </p>
-            </div>
-
-            <div class="portfolio-info-card">
-                <h2>Kategori</h2>
-                <p>Website Development UMKM</p>
-            </div>
-
-        </div>
-
-        <div class="portfolio-section-card">
-            <h2>Fitur Utama</h2>
-            <div class="feature-grid">
-                <div class="feature-item">Responsive Website</div>
-                <div class="feature-item">Database Integration</div>
-                <div class="feature-item">Business Optimization</div>
-            </div>
-        </div>
-
-        <div class="portfolio-section-card">
-            <h2>Teknologi</h2>
-            <div class="tech-list">
-                <span>Laravel</span>
-                <span>MySQL</span>
-                <span>HTML</span>
-                <span>CSS</span>
-                <span>JavaScript</span>
-            </div>
-        </div>
-
-    </div>
-</section>
-
+<section class="portfolio-detail"><div class="portfolio-container"><a href="{{ route('portfolio.index') }}" class="detail-back-btn">← Kembali ke Portfolio</a><div class="portfolio-hero-card"><span class="portfolio-badge">{{ $item->category ?: 'Portfolio Project' }}</span><h1>{{ $item->title }}</h1><p>{{ $item->description }}</p><div class="hero-actions">@if($item->demo_url)<a href="{{ $item->demo_url }}" target="_blank" rel="noopener" class="primary-btn">Lihat Demo</a>@endif<a href="{{ route('consultation') }}" class="detail-back-btn">Diskusikan Project</a></div></div>@if($item->image)<div class="portfolio-section-card"><img loading="lazy" decoding="async" style="width:100%;border-radius:16px" src="{{ \App\Support\Media::url($item->image, 'images/placeholder.svg') }}" alt="{{ $item->title }}"></div>@endif<div class="portfolio-content-grid"><div class="portfolio-info-card"><h2>Tentang Project</h2><p>{{ $item->description }}</p></div><div class="portfolio-info-card"><h2>Kategori</h2><p>{{ $item->category ?: 'Digital Solution' }}</p></div></div><div class="portfolio-section-card"><h2>Fitur Utama</h2><div class="feature-grid">@foreach(array_filter(preg_split('/\r\n|\r|\n|,/',$item->features ?? 'Responsive Website,Database Integration,Business Optimization')) as $feature)<div class="feature-item">{{ trim($feature) }}</div>@endforeach</div></div><div class="portfolio-section-card"><h2>Teknologi</h2><div class="tech-list">@foreach(array_filter(preg_split('/\r\n|\r|\n|,/',$item->technology ?? 'Laravel,MySQL,HTML,CSS,JavaScript')) as $tech)<span>{{ trim($tech) }}</span>@endforeach</div></div></div></section>
 @endsection

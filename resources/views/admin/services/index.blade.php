@@ -1,14 +1,7 @@
-<h1>Kelola Layanan</h1>
-
-@foreach($services as $service)
-<p>
-{{ $service->name }}
-
-<form method="POST" action="/admin/services/{{ $service->id }}">
-@csrf
-@method('DELETE')
-<button>Hapus</button>
-</form>
-
-</p>
-@endforeach
+@extends('admin.layouts.app')
+@section('title','Layanan') @section('page_title','Layanan')
+@section('content')
+<div class="page-actions"><div><h1 class="content-title">Layanan Digital</h1><p class="muted">Kelola penawaran jasa dan detail manfaatnya.</p></div><button class="primary-button" data-modal-open="new-service">+ Layanan Baru</button></div>
+<div class="card-grid admin-cards">@forelse($services as $item)<article class="content-card"><span class="content-badge">Layanan</span><h3>{{ $item->name }}</h3><p>{{ \Illuminate\Support\Str::limit($item->short_description ?: $item->description,120) }}</p><div class="actions"><button class="small-button" data-modal-open="service-{{ $item->id }}">Edit</button><form method="POST" action="{{ route('admin.services.destroy',$item) }}" onsubmit="return confirm('Hapus layanan?')">@csrf @method('DELETE')<button class="danger-button">Hapus</button></form></div></article><div class="modal" id="service-{{ $item->id }}"><div class="modal-card large"><button class="modal-close" data-modal-close>×</button><h2>Edit Layanan</h2>@include('admin.services.partials.form',['item'=>$item,'action'=>route('admin.services.update',$item),'method'=>'PUT'])</div></div>@empty<div class="empty-state">Belum ada layanan.</div>@endforelse</div><div class="pagination"><x-pagination :paginator="$services" /></div>
+<div class="modal" id="new-service"><div class="modal-card large"><button class="modal-close" data-modal-close>×</button><h2>Layanan Baru</h2>@include('admin.services.partials.form',['item'=>null,'action'=>route('admin.services.store'),'method'=>'POST'])</div></div>
+@endsection

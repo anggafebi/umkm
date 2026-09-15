@@ -1,0 +1,7 @@
+:root{--primary:#2563eb;--primary-2:#1d4ed8;--bg:#fff;--bg-soft:#f6f8fc;--surface:#fff;--surface-2:#f8fafc;--text:#0f172a;--muted:#64748b;--border:#e2e8f0;--shadow:0 20px 60px rgba(15,23,42,.08);--shadow-sm:0 10px 32px rgba(15,23,42,.07);--radius:24px;--header:rgba(255,255,255,.78);--dark:#07111f;--success:#16a34a}
+html[data-theme="dark"]{--bg:#07101d;--bg-soft:#0b1524;--surface:#101b2c;--surface-2:#142135;--text:#f8fafc;--muted:#9dadc2;--border:#223149;--shadow:0 22px 70px rgba(0,0,0,.26);--shadow-sm:0 12px 36px rgba(0,0,0,.22);--header:rgba(7,16,29,.82);--dark:#030914}
+
+html { color-scheme: light; background: var(--bg); }
+html[data-theme="dark"] { color-scheme: dark; }
+html.theme-preload *, html.theme-preload *::before, html.theme-preload *::after { transition: none !important; }
+::selection { background: color-mix(in srgb, var(--primary) 24%, transparent); }

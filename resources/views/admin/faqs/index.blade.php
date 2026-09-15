@@ -1,1 +1,6 @@
-<h1>CMS faqs</h1><p>Tambahkan data melalui form admin.</p>
+@extends('admin.layouts.app')
+@section('title','FAQ') @section('page_title','FAQ')
+@section('content')
+<div class="page-actions"><div><h1 class="content-title">Frequently Asked Questions</h1><p class="muted">Jawab pertanyaan umum sebelum prospek menghubungi Anda.</p></div><button class="primary-button" data-modal-open="new-faq">+ FAQ Baru</button></div>
+<div class="panel">@forelse($items as $item)<div class="faq-admin-row"><div><strong>{{ $item->question }}</strong><p>{{ $item->answer }}</p></div><div class="actions"><span class="status {{ $item->status?'deal':'closed' }}">{{ $item->status?'Aktif':'Nonaktif' }}</span><button class="small-button" data-modal-open="faq-{{ $item->id }}">Edit</button><form method="POST" action="{{ route('admin.faqs.destroy',$item) }}">@csrf @method('DELETE')<button class="danger-button">Hapus</button></form></div></div><div class="modal" id="faq-{{ $item->id }}"><div class="modal-card"><button class="modal-close" data-modal-close>×</button><h2>Edit FAQ</h2>@include('admin.faqs.partials.form',['item'=>$item,'action'=>route('admin.faqs.update',$item),'method'=>'PUT'])</div></div>@empty<div class="empty-state">Belum ada FAQ.</div>@endforelse</div><div class="modal" id="new-faq"><div class="modal-card"><button class="modal-close" data-modal-close>×</button><h2>FAQ Baru</h2>@include('admin.faqs.partials.form',['item'=>null,'action'=>route('admin.faqs.store'),'method'=>'POST'])</div></div>
+@endsection

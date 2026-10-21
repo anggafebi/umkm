@@ -1,0 +1,49 @@
+/* Admin UI refinement: align the CMS with the public site's typography and spacing. */
+:root{--a-bg:#f4f6fa;--a-surface:#fff;--a-surface2:#f8f9fc;--a-text:#182235;--a-muted:#748196;--a-border:#e4e9f1;--a-primary:#315ff4;--a-shadow:0 12px 32px rgba(25,42,78,.055)}
+html[data-theme="dark"]{--a-bg:#0b1120;--a-surface:#111c2e;--a-surface2:#172338;--a-text:#f1f5f9;--a-muted:#a2afc2;--a-border:#26354b;--a-shadow:0 12px 34px rgba(0,0,0,.2)}
+body.admin-body{background:var(--a-bg)!important;color:var(--a-text)!important;font-family:Inter,"Segoe UI",system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+.admin-shell{grid-template-columns:252px minmax(0,1fr)}
+.admin-sidebar{background:#0d1627;padding:22px 14px;border-right:1px solid rgba(255,255,255,.04)}
+.admin-brand{font-family:Manrope,Inter,sans-serif;font-size:15px;letter-spacing:-.03em;padding:8px 10px 18px}
+.admin-brand img{border-radius:10px}
+.admin-nav-label{margin:20px 10px 8px;font-size:9px;letter-spacing:.15em}
+.admin-nav{gap:4px}
+.admin-nav a{font-size:12px;padding:10px 12px;border:1px solid transparent;border-radius:10px}
+.admin-nav a:hover{background:#17243a;color:#fff}
+.admin-nav a.active{background:linear-gradient(100deg,rgba(69,105,245,.22),rgba(69,105,245,.08));border-color:rgba(117,146,255,.18);color:#fff}
+.admin-topbar{height:76px;padding:0 28px;background:color-mix(in srgb,var(--a-surface) 91%,transparent);border-bottom-color:var(--a-border)}
+.admin-topbar>div:nth-child(2)>strong{font-family:Manrope,Inter,sans-serif;font-size:14px;letter-spacing:-.025em}
+.topbar-subtitle{font-size:10px;margin-top:2px}
+.admin-user>span{border-radius:12px;background:linear-gradient(135deg,#5578ff,#3155d7)}
+.admin-content{padding:30px;max-width:1680px}
+.dashboard-welcome h1,.content-title{font-family:Manrope,Inter,sans-serif;font-size:clamp(25px,3vw,32px);line-height:1.2;letter-spacing:-.055em}
+.metric-card,.panel,.content-card{border-radius:16px;box-shadow:var(--a-shadow);border-color:var(--a-border)}
+.metric-card{padding:19px}
+.metric-card>span,.metric-card small{font-size:11px}
+.metric-card strong{font-family:Manrope,Inter,sans-serif;font-size:29px;letter-spacing:-.055em}
+.panel{padding:21px}
+.panel-heading h2{font-family:Manrope,Inter,sans-serif;font-size:15px;letter-spacing:-.025em}
+.admin-table{font-size:12px}
+.admin-table th{font-size:9px;letter-spacing:.09em}
+.admin-table td{padding:13px 11px}
+.admin-content label{font-size:11px;color:var(--a-text)}
+.admin-content input,.admin-content textarea,.admin-content select,.login-form-panel input{border-radius:10px;background:var(--a-surface2);font-size:12px;padding:11px 12px}
+.primary-button,.secondary-button,.small-button,.danger-button,.ghost-button,.icon-button,.modal-close{border-radius:10px!important;font-family:Inter,"Segoe UI",sans-serif;transition:background .18s ease,border-color .18s ease,transform .18s ease}
+.primary-button{background:var(--a-primary);box-shadow:0 7px 18px rgba(49,95,244,.16)}
+.primary-button:hover{background:#234bd0;transform:translateY(-1px)}
+.secondary-button{background:var(--a-surface2);border-color:var(--a-border)}
+.small-button{background:#edf2ff;color:#2f50c4}
+.danger-button{background:#fff0f0;color:#b42335}
+.status{border-radius:7px}
+.content-card{padding:21px}
+.content-card h3{font-family:Manrope,Inter,sans-serif;font-size:15px;letter-spacing:-.025em}
+.content-badge{letter-spacing:.12em}
+.modal-card{border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.24)}
+.alert{border-radius:11px}
+.login-brand-panel{background:radial-gradient(circle at 20% 10%,#254bc0,#0d1627 52%,#080d17)}
+.login-brand-panel h1,.login-form-panel form h2{font-family:Manrope,Inter,sans-serif;letter-spacing:-.055em}
+.login-form-panel form{border-radius:20px;box-shadow:var(--a-shadow)}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--a-primary) 45%,transparent);outline-offset:3px}
+@media(max-width:1100px){.admin-content{padding:22px}.admin-shell{grid-template-columns:232px minmax(0,1fr)}}
+@media(max-width:820px){.admin-shell{grid-template-columns:minmax(0,1fr)}.admin-sidebar{width:252px;left:-270px}.admin-content{padding:20px}.admin-topbar{padding:0 16px}}
+@media(max-width:560px){.admin-content{padding:16px}.metric-grid,.card-grid,.form-grid,.media-grid{grid-template-columns:1fr}.panel{padding:16px}.admin-topbar{height:66px}}

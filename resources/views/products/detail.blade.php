@@ -1,6 +1,45 @@
 @extends('layouts.app')
-@section('title',$product->name.' | Produk')
-@section('description',\Illuminate\Support\Str::limit($product->description,155))
+
+@php
+    $productName = \Illuminate\Support\Str::lower($product->name);
+    $demoSlug = str_contains($productName, 'iphone') ? 'iphone'
+        : (str_contains($productName, 'sepatu') ? 'sepatu'
+        : (str_contains($productName, 'kasir') ? 'pos-kasir'
+        : (str_contains($productName, 'katalog') ? 'katalog-produk'
+        : (str_contains($productName, 'toko online') ? 'toko-online' : null))));
+@endphp
+
+@section('title', $product->name.' | Produk')
+@section('description', \Illuminate\Support\Str::limit($product->description, 155))
+
 @section('content')
-<section class="modern-section"><div class="container"><a href="{{ route('products.index') }}" class="detail-back-btn">← Kembali ke Produk</a><div class="product-detail-card"><div class="product-detail-image">@if($product->image)<img loading="lazy" decoding="async" src="{{ \App\Support\Media::url($product->image, 'images/placeholder.svg') }}" alt="{{ $product->name }}">@else<div class="product-placeholder">{{ strtoupper(substr($product->name,0,1)) }}</div>@endif</div><div class="product-detail-content"><span class="section-kicker">DIGITAL PRODUCT</span><h1>{{ $product->name }}</h1><div class="product-price">{{ $product->price!==null?'Rp '.number_format($product->price,0,',','.'):'Hubungi kami' }}</div><p>{{ $product->description }}</p><a class="button-primary" href="{{ route('consultation') }}">Tanyakan Produk</a></div></div></div></section>
+<section class="modern-section">
+    <div class="container">
+        <a href="{{ route('products.index') }}" class="detail-back-btn"><x-icon name="arrow-left" size="16" /> Kembali ke Produk</a>
+        <div class="product-detail-card">
+            <div class="product-detail-image">
+                @if($product->image)
+                    <img loading="lazy" decoding="async" src="{{ \App\Support\Media::url($product->image, 'images/placeholder.svg') }}" alt="{{ $product->name }}">
+                @else
+                    <div class="product-placeholder">{{ strtoupper(substr($product->name, 0, 1)) }}</div>
+                @endif
+            </div>
+            <div class="product-detail-content">
+                <span class="section-kicker">PRODUK DIGITAL</span>
+                <h1>{{ $product->name }}</h1>
+                <div class="product-price">{{ $product->price !== null ? 'Rp '.number_format($product->price, 0, ',', '.') : 'Hubungi kami' }}</div>
+                <p>{{ $product->description }}</p>
+                <div class="hero-actions product-detail-actions">
+                    <a class="button-primary" href="{{ route('consultation') }}">Tanyakan produk <x-icon name="arrow-right" size="17" /></a>
+                    @if($demoSlug)
+                        <a class="button-secondary" href="{{ route('demo.show', $demoSlug) }}">Coba demo interaktif <x-icon name="arrow-up-right" size="17" /></a>
+                    @endif
+                </div>
+                @if($demoSlug)
+                    <p class="form-hint product-demo-note">Demo dapat dicoba langsung. Data pesanan dan transaksi pada demo tidak diproses secara nyata.</p>
+                @endif
+            </div>
+        </div>
+    </div>
+</section>
 @endsection

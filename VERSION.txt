@@ -1,9 +1,10 @@
-UMKM Premium Final Version
-Build date: 2026-09-09
+Aditech Multisolusi UMKM — Redesigned Edition
+Build date: 2026-10-19
 Laravel target: 12.x
 PHP target: 8.2+
 Frontend build tool required: No
-Vendor included: No
+Vendor included: Yes
+Database SQLite demo included: Yes
 Node modules included: No
-.env included: No
+.env demo included: Yes
 Runtime cache/log/session included: No

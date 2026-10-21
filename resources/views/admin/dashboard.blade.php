@@ -10,7 +10,7 @@
     <div class="metric-card"><span>Leads Baru</span><strong>{{ $newLeadCount }}</strong><small>dari {{ $consultationCount }} total lead</small></div>
     <div class="metric-card"><span>Visitor Bulan Ini</span><strong>{{ $visitorCount }}</strong><small>{{ $pageViewCount }} page view hari ini</small></div>
     <div class="metric-card"><span>Newsletter</span><strong>{{ $newsletterCount }}</strong><small>subscriber aktif</small></div>
-    <div class="metric-card"><span>Artikel</span><strong>{{ $blogCount }}</strong><small>{{ $portfolioCount }} portfolio · {{ $serviceCount }} layanan</small></div>
+    <div class="metric-card"><span>Artikel</span><strong>{{ $blogCount }}</strong><small>{{ $portfolioCount }} portofolio · {{ $serviceCount }} layanan</small></div>
 </div>
 <div class="dashboard-grid">
     <section class="panel span-2">

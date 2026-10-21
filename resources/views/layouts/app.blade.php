@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" href="{{ asset('images/logo-mark.svg') }}" type="image/svg+xml">
     <title>@yield('title', $siteSettings['meta_title'] ?? 'Aditech Multisolusi UMKM')</title>
     <meta name="description" content="@yield('description', $siteSettings['meta_description'] ?? 'Solusi website dan sistem digital untuk UMKM')">
     <meta name="keywords" content="{{ $siteSettings['meta_keywords'] ?? 'website UMKM, sistem informasi, digitalisasi bisnis, Laravel' }}">
     <meta name="author" content="{{ $siteSettings['site_name'] ?? 'Aditech Multisolusi' }}">
     <meta name="robots" content="index,follow,max-image-preview:large">
-    <meta name="theme-color" content="{{ $siteSettings['primary_color'] ?? '#2563eb' }}">
+    <meta name="theme-color" content="{{ $siteSettings['primary_color'] ?? '#315ff4' }}">
     <link rel="canonical" href="{{ request()->url() }}">
     <meta property="og:locale" content="id_ID">
     <meta property="og:site_name" content="{{ $siteSettings['site_name'] ?? 'Aditech Multisolusi' }}">
@@ -17,27 +18,27 @@
     <meta property="og:description" content="@yield('og_description', $siteSettings['meta_description'] ?? 'Solusi digital untuk UMKM')">
     <meta property="og:type" content="@yield('og_type', 'website')">
     <meta property="og:url" content="{{ request()->url() }}">
-    <meta property="og:image" content="{{ \App\Support\Media::url($siteSettings['og_image'] ?? null, 'images/hero/hero-mockup.png') }}">
+    <meta property="og:image" content="{{ \App\Support\Media::url($siteSettings['og_image'] ?? null, 'images/showcase/demo-pos-kasir.webp') }}">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="@yield('og_title', $siteSettings['meta_title'] ?? 'Aditech Multisolusi UMKM')">
     <meta name="twitter:description" content="@yield('og_description', $siteSettings['meta_description'] ?? 'Solusi digital untuk UMKM')">
-    <meta name="twitter:image" content="{{ \App\Support\Media::url($siteSettings['og_image'] ?? null, 'images/hero/hero-mockup.png') }}">
+    <meta name="twitter:image" content="{{ \App\Support\Media::url($siteSettings['og_image'] ?? null, 'images/showcase/demo-pos-kasir.webp') }}">
     <script>
-      (()=>{const allowDark=@json(($siteSettings['dark_mode_enabled'] ?? '1') === '1');const def=@json($siteSettings['default_theme'] ?? 'system');const saved=localStorage.getItem('aditech-theme');const sys=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';let theme='light';if(allowDark){theme=saved||(def==='system'?sys:def);if(!['light','dark'].includes(theme)) theme=sys;}document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme;})();
+      (()=>{const allowDark=@json(($siteSettings['dark_mode_enabled'] ?? '1') === '1');const def=@json($siteSettings['default_theme'] ?? 'system');let saved=null;try{saved=localStorage.getItem('aditech-theme')}catch(_){}const sys=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';let theme='light';if(allowDark){theme=saved||(def==='system'?sys:def);if(!['light','dark'].includes(theme)) theme=sys;}document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme;})();
     </script>
-    <link rel="stylesheet" href="{{ asset('assets/css/theme.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/responsive.css') }}">
-    <style>:root{--primary:{{ $siteSettings['primary_color'] ?? '#2563eb' }};}</style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('assets/css/site.css') }}">
+    <style>:root{--primary:{{ $siteSettings['primary_color'] ?? '#315ff4' }};}</style>
     @if(!empty($siteSettings['google_analytics_id']))
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ $siteSettings['google_analytics_id'] }}"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config',@json($siteSettings['google_analytics_id']));</script>
     @endif
     @stack('head')
 
-<link rel="stylesheet" href="{{ asset('assets/css/refactor-modern.css') }}">
 </head>
-<body>
+<body class="@yield('body_class')">
 <a class="skip-link" href="#main-content">Lewati ke konten utama</a>
 @include('layouts.navbar')
 <div class="nav-backdrop" data-nav-backdrop aria-hidden="true"></div>

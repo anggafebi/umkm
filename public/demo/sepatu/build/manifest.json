@@ -1,0 +1,62 @@
+{
+  "resources/css/admin.css": {
+    "file": "assets/admin-i-bmTCJJ.css",
+    "src": "resources/css/admin.css",
+    "isEntry": true,
+    "name": "admin",
+    "names": [
+      "admin.css"
+    ]
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-hgVgNDNh.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/css/cart.css": {
+    "file": "assets/cart-BtSMBBNl.css",
+    "src": "resources/css/cart.css",
+    "isEntry": true,
+    "name": "cart",
+    "names": [
+      "cart.css"
+    ]
+  },
+  "resources/css/checkout.css": {
+    "file": "assets/checkout-B2yoI5Ka.css",
+    "src": "resources/css/checkout.css",
+    "isEntry": true,
+    "name": "checkout",
+    "names": [
+      "checkout.css"
+    ]
+  },
+  "resources/css/home.css": {
+    "file": "assets/home-DSbY1HUW.css",
+    "src": "resources/css/home.css",
+    "isEntry": true,
+    "name": "home",
+    "names": [
+      "home.css"
+    ]
+  },
+  "resources/css/show.css": {
+    "file": "assets/show-DmptuOzK.css",
+    "src": "resources/css/show.css",
+    "isEntry": true,
+    "name": "show",
+    "names": [
+      "show.css"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-BbzB21r_.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  }
+}

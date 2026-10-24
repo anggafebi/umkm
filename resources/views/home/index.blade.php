@@ -13,11 +13,31 @@
         ['name' => 'POS & Operasional', 'description' => 'Alur kasir, transaksi, stok, serta ringkasan operasional yang lebih terstruktur.'],
         ['name' => 'Maintenance', 'description' => 'Pemeliharaan, pembaruan, dan pengembangan lanjutan agar sistem tetap stabil dan relevan.'],
     ];
-    $demoProducts = [
-        ['slug' => 'toko-online', 'title' => 'Toko Online UMKM', 'type' => 'Website penjualan', 'image' => 'images/showcase/demo-toko-online.webp'],
-        ['slug' => 'pos-kasir', 'title' => 'POS Kasir Digital', 'type' => 'Sistem operasional', 'image' => 'images/showcase/demo-pos-kasir.webp'],
-        ['slug' => 'katalog-produk', 'title' => 'Katalog Produk', 'type' => 'Etalase digital', 'image' => 'images/showcase/demo-katalog.webp'],
-    ];
+    
+$demoProducts = [
+    [
+        'slug' => 'kopi-umkm',
+        'product_slug' => 'website-toko-online-umkm',
+        'title' => 'Website Toko Online UMKM',
+        'type' => 'Website penjualan',
+        'image' => 'images/products/kopi-umkm.png',
+    ],
+    [
+        'slug' => 'goalgear-jersey',
+        'product_slug' => 'website-ecommerce-jersey',
+        'title' => 'Website E-Commerce Jersey',
+        'type' => 'Website e-commerce',
+        'image' => 'images/products/goal-gear.png',
+    ],
+    [
+        'slug' => 'pos-kasir',
+        'product_slug' => 'pos-kasir-digital',
+        'title' => 'POS Kasir Digital',
+        'type' => 'Sistem operasional',
+        'image' => 'images/showcase/demo-pos-kasir.webp',
+    ],
+];
+
     $fallbackFaqs = [
         ['question' => 'Apakah solusi dapat disesuaikan dengan proses bisnis kami?', 'answer' => 'Ya. Ruang lingkup, fitur, dan tahapan pengerjaan disusun berdasarkan kebutuhan, prioritas, serta kesiapan bisnis Anda.'],
         ['question' => 'Apakah proyek dapat dikerjakan secara bertahap?', 'answer' => 'Bisa. Implementasi dapat dimulai dari kebutuhan yang paling penting, kemudian dikembangkan ketika proses dan anggaran sudah siap.'],
@@ -35,7 +55,7 @@
 
             <div class="hero-actions">
                 <a class="button-primary" href="{{ route('consultation') }}">Mulai Konsultasi <x-icon name="arrow-right" size="18" /></a>
-                <a class="button-secondary" href="{{ route('demo.index') }}">Coba Demo Produk <x-icon name="arrow-up-right" size="17" /></a>
+                <a class="button-secondary" href="{{ route('products.index') }}">Coba Demo Produk <x-icon name="arrow-up-right" size="17" /></a>
             </div>
 
             <div class="hero-trust" aria-label="Keunggulan utama">
@@ -66,7 +86,7 @@
                 <img src="{{ asset('images/showcase/demo-toko-online.webp') }}" alt="Pratinjau toko online UMKM" width="1280" height="889" fetchpriority="high" decoding="async">
             </div>
 
-            <a class="hero-demo-note" href="{{ route('demo.index') }}">
+            <a class="hero-demo-note" href="{{ route('products.index') }}"
                 <span><strong>5 demo interaktif</strong><small>Coba alur produk sebelum berdiskusi</small></span>
                 <x-icon name="arrow-right" size="19" />
             </a>
@@ -128,7 +148,10 @@
 
         <div class="demo-showcase-grid">
             @foreach($demoProducts as $demo)
-                <a class="demo-product-card reveal" href="{{ route('demo.show', $demo['slug']) }}">
+                <a class="demo-product-card reveal"
+                            href="{{ $demo['product_slug'] === null
+                            ? route('products.index')
+                            : route('products.show', $demo['product_slug']) }}">
                     <div class="demo-card-image"><img src="{{ asset($demo['image']) }}" alt="Pratinjau {{ $demo['title'] }}" loading="lazy" decoding="async"></div>
                     <div class="demo-card-copy">
                         <span>{{ $demo['type'] }}</span>
@@ -141,7 +164,7 @@
 
         <div class="demo-showcase-footer reveal">
             <p>Masih tersedia demo toko sepatu dan toko gadget untuk melihat variasi tampilan serta alur belanja.</p>
-            <a class="button-light" href="{{ route('demo.index') }}">Buka pusat demo <x-icon name="arrow-right" size="18" /></a>
+            <a class="button-light" href="{{ route('products.index') }}">Buka pusat demo <x-icon name="arrow-right" size="18" /></a>
         </div>
     </div>
 </section>

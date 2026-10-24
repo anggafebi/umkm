@@ -1,13 +1,18 @@
 @extends('layouts.app')
 
+
 @php
-    $productName = \Illuminate\Support\Str::lower($product->name);
-    $demoSlug = str_contains($productName, 'iphone') ? 'iphone'
-        : (str_contains($productName, 'sepatu') ? 'sepatu'
-        : (str_contains($productName, 'kasir') ? 'pos-kasir'
-        : (str_contains($productName, 'katalog') ? 'katalog-produk'
-        : (str_contains($productName, 'toko online') ? 'toko-online' : null))));
+    $productSlug = $product->slug;
+
+    $demoSlug = match ($productSlug) {
+        'website-toko-online-umkm' => 'kopi-umkm',
+        'website-ecommerce-jersey' => 'goalgear-jersey',
+        'pos-kasir-digital' => 'pos-kasir',
+        'website-katalog-produk' => 'katalog-produk',
+        default => null,
+    };
 @endphp
+
 
 @section('title', $product->name.' | Produk')
 @section('description', \Illuminate\Support\Str::limit($product->description, 155))
@@ -31,9 +36,27 @@
                 <p>{{ $product->description }}</p>
                 <div class="hero-actions product-detail-actions">
                     <a class="button-primary" href="{{ route('consultation') }}">Tanyakan produk <x-icon name="arrow-right" size="17" /></a>
-                    @if($demoSlug)
-                        <a class="button-secondary" href="{{ route('demo.show', $demoSlug) }}">Coba demo interaktif <x-icon name="arrow-up-right" size="17" /></a>
-                    @endif
+                    
+
+@if($demoSlug)
+    <a class="button-secondary"
+       href="{{ route('demo.show', ['demo' => $demoSlug]) }}"
+       target="_blank"
+       rel="noopener noreferrer">
+
+        @if($demoSlug === 'kopi-umkm')
+            Demo Kopi Ramu
+        @elseif($demoSlug === 'goalgear-jersey')
+            Demo GoalGear Jersey
+        @else
+            Coba Demo Interaktif
+        @endif
+
+        <x-icon name="arrow-up-right" size="17" />
+    </a>
+@endif
+
+
                 </div>
                 @if($demoSlug)
                     <p class="form-hint product-demo-note">Demo dapat dicoba langsung. Data pesanan dan transaksi pada demo tidak diproses secara nyata.</p>

@@ -27,6 +27,16 @@
             'name' => 'Demo Katalog Produk',
             'description' => 'Contoh katalog produk dengan pencarian, kategori, detail spesifikasi, dan fitur simpan produk favorit.',
         ],
+        'kopi-umkm' => [
+            'title' => 'Kopi Ramu | Website UMKM',
+            'name' => 'Demo Website Kopi Ramu',
+            'description' => 'Website kedai kopi dengan katalog menu, filter kategori, keranjang belanja, dan checkout simulasi.',
+        ],      
+        'goalgear-jersey' => [
+            'title' => 'GoalGear Jersey | Demo E-Commerce',
+            'name' => 'Demo Website GoalGear Jersey',
+            'description' => 'Website toko jersey dengan katalog produk, filter kategori, pilihan ukuran, keranjang belanja, dan checkout simulasi.',
+    ],
     ];
     $meta = $demoMeta[$demo] ?? $demoMeta['toko-online'];
     $demoUrl = asset('demo/'.$demo.'/index.html');

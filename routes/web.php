@@ -16,7 +16,7 @@ Route::middleware('track')->group(function(){
     Route::get('/layanan',[ServiceController::class,'index'])->name('services.index'); Route::get('/layanan/{slug}',[ServiceController::class,'show'])->name('services.show');
     Route::get('/produk',[ProductController::class,'index'])->name('products.index'); Route::get('/produk/{slug}',[ProductController::class,'show'])->name('products.show');
     Route::get('/demo/{demo}', function($demo){
-        $allowed = ['sepatu','iphone','toko-online','pos-kasir','katalog-produk'];
+        $allowed = ['sepatu','iphone','toko-online','pos-kasir','katalog-produk','kopi-umkm','goalgear-jersey',];
         abort_unless(in_array($demo, $allowed), 404);
         return view('demos.show', ['demo'=>$demo]);
     })->name('demo.show');
@@ -29,4 +29,5 @@ Route::post('/kontak',[ContactController::class,'store'])->name('contact.store')
 Route::post('/konsultasi',[ConsultationController::class,'store'])->name('consultation.store');
 Route::post('/newsletter',[NewsletterController::class,'store'])->name('newsletter.store');
 Route::get('/sitemap.xml',[SitemapController::class,'index'])->name('sitemap');
-require __DIR__.'/auth.php'; require __DIR__.'/admin.php';
+require __DIR__.'/auth.php';
+require __DIR__.'/admin.php';

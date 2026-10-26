@@ -9,6 +9,8 @@
         'website-ecommerce-jersey' => 'goalgear-jersey',
         'pos-kasir-digital' => 'pos-kasir',
         'website-katalog-produk' => 'katalog-produk',
+        'demo-toko-iphone-online' => 'iphone',
+        'demo-toko-sepatu-online' => 'sepatu',
         default => null,
     };
 @endphp
@@ -44,13 +46,23 @@
        target="_blank"
        rel="noopener noreferrer">
 
+        
         @if($demoSlug === 'kopi-umkm')
-            Demo Kopi Ramu
+            Demo Toko Online UMKM
         @elseif($demoSlug === 'goalgear-jersey')
-            Demo GoalGear Jersey
+            Demo E-Commerce Jersey
+        @elseif($demoSlug === 'pos-kasir')
+            Demo POS Kasir Digital
+        @elseif($demoSlug === 'katalog-produk')
+            Demo Website Katalog Produk
+        @elseif($demoSlug === 'iphone')
+            Demo Toko iPhone Online
+        @elseif($demoSlug === 'sepatu')
+            Demo Toko Sepatu Online
         @else
-            Coba Demo Interaktif
+            Lihat Demo Interaktif
         @endif
+
 
         <x-icon name="arrow-up-right" size="17" />
     </a>

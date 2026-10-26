@@ -14,30 +14,6 @@
         ['name' => 'Maintenance', 'description' => 'Pemeliharaan, pembaruan, dan pengembangan lanjutan agar sistem tetap stabil dan relevan.'],
     ];
     
-$demoProducts = [
-    [
-        'slug' => 'kopi-umkm',
-        'product_slug' => 'website-toko-online-umkm',
-        'title' => 'Website Toko Online UMKM',
-        'type' => 'Website penjualan',
-        'image' => 'images/products/kopi-umkm.png',
-    ],
-    [
-        'slug' => 'goalgear-jersey',
-        'product_slug' => 'website-ecommerce-jersey',
-        'title' => 'Website E-Commerce Jersey',
-        'type' => 'Website e-commerce',
-        'image' => 'images/products/goal-gear.png',
-    ],
-    [
-        'slug' => 'pos-kasir',
-        'product_slug' => 'pos-kasir-digital',
-        'title' => 'POS Kasir Digital',
-        'type' => 'Sistem operasional',
-        'image' => 'images/showcase/demo-pos-kasir.webp',
-    ],
-];
-
     $fallbackFaqs = [
         ['question' => 'Apakah solusi dapat disesuaikan dengan proses bisnis kami?', 'answer' => 'Ya. Ruang lingkup, fitur, dan tahapan pengerjaan disusun berdasarkan kebutuhan, prioritas, serta kesiapan bisnis Anda.'],
         ['question' => 'Apakah proyek dapat dikerjakan secara bertahap?', 'answer' => 'Bisa. Implementasi dapat dimulai dari kebutuhan yang paling penting, kemudian dikembangkan ketika proses dan anggaran sudah siap.'],
@@ -75,7 +51,7 @@ $demoProducts = [
                     <strong>POS & Operasional</strong>
                     <span class="showcase-status">Demo aktif</span>
                 </div>
-                <img src="{{ asset('images/showcase/demo-pos-kasir.webp') }}" alt="Pratinjau sistem POS kasir" width="1280" height="889" fetchpriority="high" decoding="async">
+                <img src="{{ asset('images/products/pos-kasir.png') }}" alt="Pratinjau sistem POS kasir" width="1280" height="889" fetchpriority="high" decoding="async">
             </div>
 
             <div class="showcase-window showcase-window-side">
@@ -83,11 +59,11 @@ $demoProducts = [
                     <strong>Toko Online</strong>
                     <x-icon name="arrow-up-right" size="15" />
                 </div>
-                <img src="{{ asset('images/showcase/demo-toko-online.webp') }}" alt="Pratinjau toko online UMKM" width="1280" height="889" fetchpriority="high" decoding="async">
+                <img src="{{ asset('images/products/tumnel4.png') }}" alt="Pratinjau toko online UMKM" width="1280" height="889" fetchpriority="high" decoding="async">
             </div>
 
             <a class="hero-demo-note" href="{{ route('products.index') }}"
-                <span><strong>5 demo interaktif</strong><small>Coba alur produk sebelum berdiskusi</small></span>
+                <span><strong> demo interaktif</strong><small>Coba alur produk sebelum berdiskusi</small></span>
                 <x-icon name="arrow-right" size="19" />
             </a>
         </div>
@@ -135,39 +111,109 @@ $demoProducts = [
         </div>
     </div>
 </section>
+        
 
-<section class="section demo-showcase-section">
+<section class="section demo-showcase-section" data-product-carousel>
     <div class="container">
         <div class="section-heading split reveal">
             <div>
-                <span class="section-kicker">Demo Produk</span>
-                <h2>Lihat alurnya. Coba langsung. Nilai sebelum memutuskan.</h2>
+                <span class="section-kicker">Produk Digital</span>
+                <h2>
+                    {{ $siteSettings['products_home_title']
+                        ?? 'Solusi digital untuk bisnis Anda.' }}
+                </h2>
             </div>
-            <p>Setiap demo berjalan langsung di browser dan memperlihatkan pengalaman penggunaan yang dapat dikembangkan lebih lanjut.</p>
+            <p>
+                {{ $siteSettings['products_home_description']
+                    ?? 'Jelajahi produk digital yang tersedia dan temukan solusi yang sesuai dengan kebutuhan bisnis.' }}
+            </p>
         </div>
 
-        <div class="demo-showcase-grid">
-            @foreach($demoProducts as $demo)
-                <a class="demo-product-card reveal"
-                            href="{{ $demo['product_slug'] === null
-                            ? route('products.index')
-                            : route('products.show', $demo['product_slug']) }}">
-                    <div class="demo-card-image"><img src="{{ asset($demo['image']) }}" alt="Pratinjau {{ $demo['title'] }}" loading="lazy" decoding="async"></div>
-                    <div class="demo-card-copy">
-                        <span>{{ $demo['type'] }}</span>
-                        <h3>{{ $demo['title'] }}</h3>
-                        <div>Coba demo <x-icon name="arrow-up-right" size="17" /></div>
+        @if($products->isNotEmpty())
+            <div class="product-carousel">
+                <div class="product-carousel-viewport">
+                    <div class="demo-showcase-grid product-carousel-track"
+                         data-product-track>
+
+                        @foreach($products as $product)
+                            <a class="demo-product-card product-carousel-card"
+                               href="{{ route('products.show', $product->slug) }}">
+
+                                <div class="demo-card-image">
+                                    <img
+                                        src="{{ \App\Support\Media::url($product->image, 'images/placeholder.svg') }}"
+                                        alt="Pratinjau {{ $product->name }}"
+                                        loading="lazy"
+                                        decoding="async"
+                                        width="720"
+                                        height="520">
+                                </div>
+
+                                <div class="demo-card-copy">
+                                    <span>Produk digital</span>
+
+                                    <h3>{{ $product->name }}</h3>
+
+                                    <p>
+                                        {{ \Illuminate\Support\Str::limit(
+                                            $product->description
+                                                ?: 'Solusi digital untuk kebutuhan bisnis Anda.',
+                                            105
+                                        ) }}
+                                    </p>
+
+                                    <div class="product-carousel-link">
+                                        Lihat detail
+                                        <x-icon name="arrow-up-right" size="17" />
+                                    </div>
+                                </div>
+                            </a>
+                        @endforeach
+
                     </div>
-                </a>
-            @endforeach
-        </div>
+                </div>
+
+                @if($products->count() > 1)
+                    <div class="product-carousel-controls">
+                        <span data-product-status
+                              class="product-carousel-status"
+                              aria-live="polite"></span>
+
+                        <div class="product-carousel-buttons">
+                            <button type="button"
+                                    class="product-carousel-button"
+                                    data-product-prev
+                                    aria-label="Produk sebelumnya">
+                                <x-icon name="arrow-left" size="18" />
+                            </button>
+
+                            <button type="button"
+                                    class="product-carousel-button"
+                                    data-product-next
+                                    aria-label="Produk berikutnya">
+                                <x-icon name="arrow-right" size="18" />
+                            </button>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        @else
+            <p>Belum ada produk yang tersedia.</p>
+        @endif
 
         <div class="demo-showcase-footer reveal">
-            <p>Masih tersedia demo toko sepatu dan toko gadget untuk melihat variasi tampilan serta alur belanja.</p>
-            <a class="button-light" href="{{ route('products.index') }}">Buka pusat demo <x-icon name="arrow-right" size="18" /></a>
+            <p>
+                Informasi produk mengikuti data yang dikelola melalui panel admin.
+            </p>
+
+            <a class="button-light" href="{{ route('products.index') }}">
+                Lihat semua produk
+                <x-icon name="arrow-right" size="18" />
+            </a>
         </div>
     </div>
 </section>
+
 
 <section class="section why-section">
     <div class="container why-layout">

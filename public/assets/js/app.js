@@ -93,4 +93,120 @@
     document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
     start();
   }
+    
+  // Homepage product carousel
+  document.querySelectorAll('[data-product-carousel]').forEach(carousel => {
+    const track = carousel.querySelector('[data-product-track]');
+    const cards = track
+      ? Array.from(track.querySelectorAll('.product-carousel-card'))
+      : [];
+
+    const prev = carousel.querySelector('[data-product-prev]');
+    const next = carousel.querySelector('[data-product-next]');
+    const status = carousel.querySelector('[data-product-status]');
+
+    if (!track || cards.length < 2 || !prev || !next) return;
+
+    let pageIndex = 0;
+    let timer = null;
+
+    // Jumlah kartu yang terlihat mengikuti ukuran layar.
+    const visibleCount = () => {
+      if (window.innerWidth <= 620) return 1;
+      if (window.innerWidth <= 930) return 2;
+      return 3;
+    };
+
+    const pageCount = () =>
+      Math.ceil(cards.length / visibleCount());
+
+    // Geser track menuju kartu pertama pada halaman yang dipilih.
+    const render = () => {
+      const totalPages = pageCount();
+
+      pageIndex = Math.max(
+        0,
+        Math.min(pageIndex, totalPages - 1)
+      );
+
+      const startIndex = pageIndex * visibleCount();
+      const target = cards[startIndex];
+
+      if (target) {
+        const offset = target.offsetLeft - track.offsetLeft;
+        track.style.transform =
+          `translate3d(-${offset}px, 0, 0)`;
+      }
+
+      if (status) {
+        status.textContent =
+          `${String(pageIndex + 1).padStart(2, '0')} / ` +
+          `${String(totalPages).padStart(2, '0')}`;
+      }
+    };
+
+    // Pindah satu halaman dan kembali ke awal jika sudah di akhir.
+    const move = direction => {
+      const totalPages = pageCount();
+
+      pageIndex =
+        (pageIndex + direction + totalPages) % totalPages;
+
+      render();
+    };
+
+    const stop = () => {
+      if (timer !== null) {
+        window.clearInterval(timer);
+        timer = null;
+      }
+    };
+
+    const start = () => {
+      stop();
+
+      if (
+        reducedMotion ||
+        document.hidden ||
+        cards.length <= visibleCount()
+      ) {
+        return;
+      }
+
+      timer = window.setInterval(() => {
+        move(1);
+      }, 5500);
+    };
+
+    prev.addEventListener('click', () => {
+      move(-1);
+      start();
+    });
+
+    next.addEventListener('click', () => {
+      move(1);
+      start();
+    });
+
+    // Jeda saat pengguna mengarahkan kursor atau fokus ke carousel.
+    carousel.addEventListener('mouseenter', stop);
+    carousel.addEventListener('mouseleave', start);
+    carousel.addEventListener('focusin', stop);
+    carousel.addEventListener('focusout', start);
+
+    // Jangan jalankan animasi ketika tab browser tidak aktif.
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop();
+      else start();
+    });
+
+    window.addEventListener('resize', () => {
+      render();
+      start();
+    }, { passive: true });
+
+    render();
+    start();
+  });
+
 })();

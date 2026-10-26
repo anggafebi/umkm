@@ -31,7 +31,7 @@ class HomeController extends Controller
         try {
             $data = [
                 'services' => Service::latest()->take(6)->get(),
-                'products' => Product::latest()->take(3)->get(),
+                'products' => Product::latest()->get(),
                 'portfolios' => Portfolio::latest()->take(4)->get(),
                 'testimonials' => Testimonial::where('status', true)->latest()->take(8)->get(),
                 'faqs' => Faq::where('status', true)->orderBy('order')->take(8)->get(),
@@ -49,7 +49,7 @@ class HomeController extends Controller
             ];
         } catch (\Throwable $exception) {
             $data['services'] = PublicContentFallbacks::services()->take(6);
-            $data['products'] = PublicContentFallbacks::products()->take(3);
+            $data['products'] = PublicContentFallbacks::products();
             $data['portfolios'] = PublicContentFallbacks::portfolios()->take(4);
             $data['posts'] = PublicContentFallbacks::posts()->take(3);
 

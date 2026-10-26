@@ -292,7 +292,12 @@ html[data-theme="dark"] .theme-toggle .moon { opacity: 1; transform: scale(1) ro
   background: var(--surface);
   box-shadow: var(--shadow-lg);
 }
-.showcase-window-main { width: min(610px, 94%); right: 0; top: 24px; transform: rotate(1.2deg); }
+.showcase-window-main {
+    width: min(610px, 94%);
+    right: 0;
+    top: -120px;
+    transform: rotate(1.2deg);
+}
 .showcase-window-side { width: 275px; left: 0; bottom: 18px; transform: rotate(-3deg); z-index: 2; box-shadow: 0 25px 60px rgba(8, 20, 44, .2); }
 .showcase-toolbar { height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 14px; border-bottom: 1px solid var(--border); background: color-mix(in srgb, var(--surface) 86%, var(--surface-2)); color: var(--muted); }
 .showcase-toolbar strong { margin-right: auto; color: var(--heading); font-size: 11px; font-weight: 750; letter-spacing: -.01em; }
@@ -935,3 +940,150 @@ html[data-theme="dark"] .form-error { background: rgba(180, 45, 67, .2); color: 
 .service-cta,
 .service-bottom-cta a,
 .demo-frame-toolbar a { display: inline-flex; align-items: center; gap: 7px; }
+
+
+/* =========================================
+   Homepage Product Carousel
+   ========================================= */
+
+.product-carousel {
+    position: relative;
+    width: 100%;
+}
+
+.product-carousel-viewport {
+    width: 100%;
+    overflow: hidden;
+}
+
+.demo-showcase-grid.product-carousel-track {
+    display: flex;
+    gap: 18px;
+    align-items: stretch;
+    transition: transform 0.55s cubic-bezier(.22, .61, .36, 1);
+    will-change: transform;
+}
+
+.demo-showcase-grid.product-carousel-track
+.product-carousel-card {
+    display: flex;
+    flex: 0 0 calc((100% - 36px) / 3);
+    min-width: 0;
+    flex-direction: column;
+    grid-column: auto;
+}
+
+.demo-showcase-grid.product-carousel-track
+.product-carousel-card:last-child {
+    display: flex;
+    grid-column: auto;
+}
+
+.product-carousel-card .demo-card-image {
+    flex: 0 0 auto;
+    aspect-ratio: 1.5 / 1;
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, .09);
+}
+
+.product-carousel-card .demo-card-copy {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 20px 21px 22px;
+}
+
+.product-carousel-card .demo-card-copy h3 {
+    margin: 0;
+    line-height: 1.4;
+}
+
+.product-carousel-card .demo-card-copy p {
+    margin: 0;
+    color: #aab7ca;
+    font-size: 12px;
+    line-height: 1.65;
+}
+
+.product-carousel-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: auto;
+    padding-top: 8px;
+    color: #cfd8e8;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.product-carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 22px;
+}
+
+.product-carousel-status {
+    color: #9facbf;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+}
+
+.product-carousel-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.product-carousel-button {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, .2);
+    border-radius: 13px;
+    background: rgba(255, 255, 255, .07);
+    color: #fff;
+    cursor: pointer;
+}
+
+.product-carousel-button:hover {
+    border-color: rgba(142, 165, 255, .65);
+    background: rgba(142, 165, 255, .16);
+}
+
+.product-carousel-button:focus-visible {
+    outline: 2px solid #8ea5ff;
+    outline-offset: 3px;
+}
+
+/* Tablet: 2 kartu */
+@media (max-width: 930px) {
+    .demo-showcase-grid.product-carousel-track
+    .product-carousel-card {
+        flex-basis: calc((100% - 18px) / 2);
+    }
+}
+
+/* HP: 1 kartu */
+@media (max-width: 620px) {
+    .demo-showcase-grid.product-carousel-track {
+        gap: 14px;
+    }
+
+    .demo-showcase-grid.product-carousel-track
+    .product-carousel-card {
+        flex-basis: 100%;
+    }
+}
+
+/* Hormati preferensi pengurangan animasi */
+@media (prefers-reduced-motion: reduce) {
+    .demo-showcase-grid.product-carousel-track {
+        transition: none;
+        will-change: auto;
+    }
+}

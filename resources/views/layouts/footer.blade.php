@@ -18,6 +18,9 @@
             <a class="footer-whatsapp" href="https://wa.me/{{ str_starts_with($waFooter, '0') ? '62'.substr($waFooter, 1) : $waFooter }}?text=Halo%20Aditech,%20saya%20ingin%20berdiskusi" target="_blank" rel="noopener">
                 <x-icon name="message-square" size="17" /> WhatsApp
             </a>
+            <a class="footer-instagram" href="https://www.instagram.com/aditech.id/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Aditech (buka tab baru)">
+                Instagram Aditech · @aditech.id
+            </a>
         </div>
 
         <div class="footer-column">

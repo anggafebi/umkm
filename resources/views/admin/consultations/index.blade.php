@@ -2,62 +2,10 @@
 @section('title','Leads')
 @section('page_title','Leads & Konsultasi')
 @section('content')
-<div class="page-actions">
-    <form class="filter-form" method="GET">
-        <input name="q" value="{{ request('q') }}" placeholder="Cari nama, bisnis, atau telepon">
-        <select name="status">
-            <option value="">Semua status</option>
-            @foreach(['new'=>'Baru','contacted'=>'Dihubungi','follow_up'=>'Follow Up','deal'=>'Deal','closed'=>'Selesai'] as $key=>$label)
-                <option value="{{ $key }}" @selected(request('status')===$key)>{{ $label }}</option>
-            @endforeach
-        </select>
-        <button class="secondary-button" type="submit"><x-icon name="search" size="16" /> Filter</button>
-    </form>
-    <a class="primary-button" href="{{ route('admin.consultations.export') }}">Export CSV <x-icon name="arrow-up-right" size="16" /></a>
-</div>
-
-<div class="panel">
-    <div class="table-wrap">
-        <table class="admin-table">
-            <thead><tr><th>Prospek</th><th>Kebutuhan</th><th>Status</th><th>Masuk</th><th>Aksi</th></tr></thead>
-            <tbody>
-            @forelse($consultations as $lead)
-                <tr>
-                    <td><strong>{{ $lead->name }}</strong><small>{{ $lead->business_name ?: 'Tanpa nama bisnis' }} · {{ $lead->phone }}</small></td>
-                    <td>{{ $lead->service_interest ?: '-' }}<small>{{ \Illuminate\Support\Str::limit($lead->message,70) }}</small></td>
-                    <td><span class="status {{ $lead->status }}">{{ ucwords(str_replace('_',' ',$lead->status)) }}</span></td>
-                    <td>{{ $lead->created_at->format('d M Y H:i') }}</td>
-                    <td><button class="small-button" type="button" data-modal-open="lead-{{ $lead->id }}">Kelola</button></td>
-                </tr>
-            @empty
-                <tr><td colspan="5">Tidak ada data.</td></tr>
-            @endforelse
-            </tbody>
-        </table>
-    </div>
-    <div class="pagination"><x-pagination :paginator="$consultations" /></div>
-</div>
-
-@foreach($consultations as $lead)
-<div class="modal" id="lead-{{ $lead->id }}" aria-hidden="true">
-    <div class="modal-card">
-        <button class="modal-close" type="button" data-modal-close aria-label="Tutup">×</button>
-        <h2>{{ $lead->name }}</h2>
-        <p>{{ $lead->email ?: '-' }} · {{ $lead->phone }}</p>
-        <div class="info-box"><strong>Pesan</strong><p>{{ $lead->message ?: 'Tidak ada pesan.' }}</p></div>
-        <form method="POST" action="{{ route('admin.consultations.update',$lead) }}">
-            @csrf @method('PUT')
-            <label>Status
-                <select name="status">
-                    @foreach(['new'=>'Baru','contacted'=>'Dihubungi','follow_up'=>'Follow Up','deal'=>'Deal','closed'=>'Selesai'] as $key=>$label)
-                        <option value="{{ $key }}" @selected($lead->status===$key)>{{ $label }}</option>
-                    @endforeach
-                </select>
-            </label>
-            <label>Catatan Admin<textarea name="admin_notes" rows="5">{{ $lead->admin_notes }}</textarea></label>
-            <button class="primary-button" type="submit">Simpan Perubahan</button>
-        </form>
-    </div>
-</div>
-@endforeach
+<div class="page-actions"><div><h2>Konsultasi Masuk</h2><p class="muted">{{ $unread }} notifikasi konsultasi atau balasan client belum dibaca oleh Anda. Buka detail untuk melihat pesan tanpa mengunduh CSV.</p></div><a class="secondary-button" href="{{ route('admin.consultations.export') }}">Export CSV <x-icon name="arrow-up-right" size="16" /></a></div>
+<div class="page-actions"><form class="filter-form" method="GET"><input name="q" value="{{ request('q') }}" placeholder="Cari nama, email, telepon, pesan"><select name="status"><option value="">Semua status</option>@foreach(['new'=>'Baru','contacted'=>'Dihubungi','follow_up'=>'Tindak lanjut','deal'=>'Disepakati','closed'=>'Selesai'] as $key=>$label)<option value="{{ $key }}" @selected(request('status')===$key)>{{ $label }}</option>@endforeach</select><select name="product_id"><option value="">Semua produk</option>@foreach($products as $product)<option value="{{ $product->id }}" @selected((string)request('product_id')===(string)$product->id)>{{ $product->name }}</option>@endforeach</select><button class="secondary-button" type="submit"><x-icon name="search" size="16" /> Filter</button></form></div>
+<div class="panel"><div class="table-wrap"><table class="admin-table"><thead><tr><th>Prospek</th><th>Produk & Pesan</th><th>Balasan</th><th>Status</th><th>Masuk</th><th>Aksi</th></tr></thead><tbody>
+@forelse($consultations as $lead)<tr><td><strong>{{ $lead->name }}</strong><small>{{ $lead->email ?: '-' }} · {{ $lead->phone }}</small></td><td><strong>{{ $lead->product_label }}</strong><small>{{ \Illuminate\Support\Str::limit($lead->message, 80) }}</small></td><td>{{ $lead->replies_count }} @if(in_array($lead->id, $unreadReplyTicketIds, true))<span class="status new">Pesan client baru</span>@endif</td><td><span class="status {{ $lead->status }}">{{ ['new'=>'Baru','contacted'=>'Dihubungi','follow_up'=>'Tindak lanjut','deal'=>'Disepakati','closed'=>'Selesai'][$lead->status] ?? $lead->status }}</span></td><td>{{ $lead->created_at->format('d M Y H:i') }}</td><td><a class="small-button" href="{{ route('admin.consultations.show', $lead) }}">Lihat Detail</a></td></tr>
+@empty<tr><td colspan="6">Tidak ada data.</td></tr>@endforelse
+</tbody></table></div><div class="pagination"><x-pagination :paginator="$consultations" /></div></div>
 @endsection

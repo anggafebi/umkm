@@ -10,8 +10,15 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role'
+        'role',
+        'phone',
+        'is_active'
     ];
+
+    protected $casts = ['is_active' => 'boolean'];
+
+    public function consultations() { return $this->hasMany(Consultation::class); }
+    public function notifications() { return $this->hasMany(SystemNotification::class); }
 
     protected $hidden = [
         'password',

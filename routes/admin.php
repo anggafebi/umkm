@@ -23,6 +23,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function(){
     Route::resource('faqs',FaqController::class)->only(['index','store','update','destroy']);
     Route::resource('pricing',PricingPackageController::class)->only(['index','store','update','destroy']);
     Route::get('consultations',[ConsultationController::class,'index'])->name('consultations.index');
+    Route::get('consultations/{consultation}',[ConsultationController::class,'show'])->name('consultations.show');
+    Route::post('consultations/{consultation}/reply',[ConsultationController::class,'reply'])->middleware('throttle:12,1')->name('consultations.reply');
     Route::put('consultations/{consultation}',[ConsultationController::class,'update'])->name('consultations.update');
     Route::get('consultations-export',[ConsultationController::class,'export'])->name('consultations.export');
     Route::get('blog',[BlogController::class,'index'])->name('blog.index');

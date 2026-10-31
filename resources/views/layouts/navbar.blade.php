@@ -15,6 +15,7 @@
             <a class="{{ request()->routeIs('portfolio.*') ? 'active' : '' }}" href="{{ route('portfolio.index') }}">Portofolio</a>
             <a class="{{ request()->routeIs('blog.*') ? 'active' : '' }}" href="{{ route('blog.index') }}">Artikel</a>
             <a class="{{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">Tentang</a>
+            @guest<a class="nav-cta nav-cta-mobile" href="{{ route('login') }}">Masuk</a><a class="nav-cta nav-cta-mobile" href="{{ route('register') }}">Daftar</a>@else<a class="nav-cta nav-cta-mobile" href="{{ auth()->user()->role === 'client' ? route('client.dashboard') : route('admin.dashboard') }}">Akun Saya</a>@endguest
             <a class="nav-cta nav-cta-mobile" href="{{ route('consultation') }}">Mulai Konsultasi <x-icon name="arrow-right" size="17" /></a>
         </nav>
 
@@ -25,6 +26,12 @@
                     <span class="moon" aria-hidden="true"><x-icon name="moon" size="19" /></span>
                 </button>
             @endif
+            @guest
+                <a class="header-cta" href="{{ route('login') }}">Masuk / Daftar</a>
+            @else
+                <a class="header-cta" href="{{ auth()->user()->role === 'client' ? route('client.dashboard') : route('admin.dashboard') }}">{{ auth()->user()->role === 'client' ? 'Akun Saya' : 'Admin' }}</a>
+                <form method="POST" action="{{ route('logout') }}" style="display:inline">@csrf<button class="header-cta" type="submit">Keluar</button></form>
+            @endguest
             <a class="header-cta" href="{{ route('consultation') }}">Konsultasi <x-icon name="arrow-right" size="17" /></a>
             <button type="button" class="mobile-menu-btn" data-mobile-menu aria-controls="primaryNavigation" aria-expanded="false" aria-label="Buka menu navigasi">
                 <span class="menu-open-icon" aria-hidden="true"><x-icon name="menu" size="21" /></span>

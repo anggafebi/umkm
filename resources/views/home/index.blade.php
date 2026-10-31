@@ -62,8 +62,8 @@
                 <img src="{{ asset('images/products/tumnel4.png') }}" alt="Pratinjau toko online UMKM" width="1280" height="889" fetchpriority="high" decoding="async">
             </div>
 
-            <a class="hero-demo-note" href="{{ route('products.index') }}"
-                <span><strong> demo interaktif</strong><small>Coba alur produk sebelum berdiskusi</small></span>
+            <a class="hero-demo-note" href="{{ route('products.index') }}">
+                <span><strong>Demo interaktif</strong><small>Coba alur produk sebelum berdiskusi</small></span>
                 <x-icon name="arrow-right" size="19" />
             </a>
         </div>
@@ -162,6 +162,8 @@
                                         ) }}
                                     </p>
 
+                                    <p class="product-home-price"><strong>{{ \App\Support\ProductPricing::label($product) }}</strong></p>
+                                    @if($product->price !== null && (float)$product->price > 0)<small>Harga awal. Total biaya dapat berubah sesuai fitur dan kebutuhan.</small>@endif
                                     <div class="product-carousel-link">
                                         Lihat detail
                                         <x-icon name="arrow-up-right" size="17" />
@@ -259,10 +261,12 @@
 
         <div class="process-grid">
             @foreach([
-                ['01', 'Pemetaan', 'Memahami tujuan, pengguna, masalah, dan prioritas bisnis.'],
-                ['02', 'Struktur & Desain', 'Menyusun arsitektur informasi, alur pengguna, dan sistem visual.'],
-                ['03', 'Pengembangan', 'Membangun, menguji, dan mengoptimalkan fungsi pada berbagai perangkat.'],
-                ['04', 'Peluncuran', 'Menyiapkan publikasi, serah terima, dan dukungan setelah go-live.'],
+                ['01', 'Konsultasi', 'Client menyampaikan kebutuhan dan tujuan bisnis.'],
+                ['02', 'Analisis', 'Tim mempelajari kebutuhan dan menentukan pendekatan solusi.'],
+                ['03', 'Proposal', 'Tim menyampaikan rekomendasi solusi, lingkup pekerjaan, dan penawaran bila diperlukan.'],
+                ['04', 'Development', 'Tim mengembangkan website atau sistem sesuai kebutuhan yang disepakati.'],
+                ['05', 'Testing', 'Tim menguji fungsi dan kesiapan sistem sebelum digunakan.'],
+                ['06', 'Launching', 'Website atau sistem disiapkan untuk digunakan dan diserahkan sesuai kesepakatan.'],
             ] as $step)
                 <article class="process-card reveal">
                     <span>{{ $step[0] }}</span>

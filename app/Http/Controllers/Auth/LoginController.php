@@ -33,9 +33,15 @@ class LoginController extends Controller
         }
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            if (Auth::user()->role === 'client' && !Auth::user()->is_active) {
+                Auth::logout();
+                throw ValidationException::withMessages(['email' => 'Akun client dinonaktifkan.']);
+            }
             RateLimiter::clear($key);
             $request->session()->regenerate();
-            return redirect()->intended(route('admin.dashboard'));
+            return Auth::user()->role === 'client'
+                ? redirect()->route('client.dashboard')
+                : redirect()->intended(route('admin.dashboard'));
         }
 
         RateLimiter::hit($key, 60);

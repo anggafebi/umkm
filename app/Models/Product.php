@@ -11,6 +11,14 @@ class Product extends Model
         'slug',
         'description',
         'price',
-        'image'
+        'image',
+        'price_is_starting_at'
     ];
+
+    protected $casts = ['price_is_starting_at' => 'boolean'];
+
+    public function getDisplayPriceAttribute(): string
+    {
+        return \App\Support\ProductPricing::label($this);
+    }
 }

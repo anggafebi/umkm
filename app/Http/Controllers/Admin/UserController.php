@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index(){ abort_unless(auth()->user()->role === 'admin', 403); return view('admin.users.index',['users'=>User::latest()->get()]); }
+    public function index(){ abort_unless(auth()->user()->role === 'admin', 403); return view('admin.users.index',['users'=>User::whereIn('role', ['admin', 'editor'])->latest()->get()]); }
     public function store(Request $request)
     {
         abort_unless(auth()->user()->role === 'admin', 403);

@@ -34,10 +34,11 @@
             <div class="product-detail-content">
                 <span class="section-kicker">PRODUK DIGITAL</span>
                 <h1>{{ $product->name }}</h1>
-                <div class="product-price">{{ $product->price !== null ? 'Rp '.number_format($product->price, 0, ',', '.') : 'Hubungi kami' }}</div>
+                <div class="product-price">{{ \App\Support\ProductPricing::label($product) }}</div>
+                @if($product->price !== null && (float)$product->price > 0)<p class="form-hint">Harga awal. Total biaya dapat berubah sesuai fitur dan kebutuhan.</p>@endif
                 <p>{{ $product->description }}</p>
                 <div class="hero-actions product-detail-actions">
-                    <a class="button-primary" href="{{ route('consultation') }}">Tanyakan produk <x-icon name="arrow-right" size="17" /></a>
+                    <a class="button-primary" href="{{ route('consultation', ['produk' => $product->slug]) }}">Tanyakan produk <x-icon name="arrow-right" size="17" /></a>
                     
 
 @if($demoSlug)

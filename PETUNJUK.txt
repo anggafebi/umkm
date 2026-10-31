@@ -1,0 +1,4 @@
+Patch ini hanya mengubah resources/views/admin/layouts/app.blade.php.
+Salin file tersebut ke folder proyek umkm kamu pada path yang sama.
+Jalankan php artisan view:clear dan refresh halaman admin.
+Tidak perlu migrate dan tidak mengubah Git/database.

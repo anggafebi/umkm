@@ -1,0 +1,11 @@
+PATCH HERO BERANDA ADITECH
+
+1. Backup kedua file sebelum menimpa:
+   - resources/views/home/index.blade.php
+   - public/assets/css/site.css
+2. Ekstrak patch lalu salin struktur folder ke root proyek Laravel (misalnya D:\laragon\www\umkm).
+3. Jalankan: php artisan view:clear
+4. Refresh paksa: Ctrl+F5 (CSS mungkin tersimpan di cache browser).
+
+Tidak mengubah .git, .env, database, atau fitur lain.
+Untuk judul hero yang diatur lewat CMS, isi teks tidak diubah oleh patch ini.

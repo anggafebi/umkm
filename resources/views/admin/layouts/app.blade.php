@@ -18,7 +18,7 @@
 <div class="admin-shell">
     <aside class="admin-sidebar" id="adminSidebar" aria-label="Navigasi admin">
         <div class="admin-sidebar-head">
-            <a class="admin-brand" href="{{ route('admin.dashboard') }}">
+            <a class="admin-brand" href="{{ route('home') }}" aria-label="Ke beranda website Aditech" title="Lihat beranda website">
                 <img src="{{ asset('images/logo-mark.svg') }}" alt="" width="42" height="42">
                 <span><strong>Aditech</strong><small>Admin workspace</small></span>
             </a>
@@ -29,7 +29,7 @@
             <div class="admin-nav-group">
                 <p class="admin-nav-label">Ringkasan</p>
                 <a class="{{ request()->routeIs('admin.dashboard')?'active':'' }}" href="{{ route('admin.dashboard') }}"><x-icon name="layout-dashboard" size="18" /><span>Dashboard</span></a>
-                <a class="{{ request()->routeIs('admin.consultations.*')?'active':'' }}" href="{{ route('admin.consultations.index') }}"><x-icon name="message-square" size="18" /><span>Leads & Konsultasi</span></a>
+                <a class="{{ request()->routeIs('admin.consultations.*')?'active':'' }}" href="{{ route('admin.consultations.index') }}"><x-icon name="message-square" size="18" /><span>Leads & Konsultasi</span>@php($unreadLeads = \App\Models\SystemNotification::where('user_id', auth()->id())->whereIn('type', ['consultation_new', 'consultation_client_reply'])->whereNull('read_at')->count())@if($unreadLeads)<span class="status new" aria-label="{{ $unreadLeads }} konsultasi baru">{{ $unreadLeads }}</span>@endif</a>
                 <a class="{{ request()->routeIs('admin.newsletter.*')?'active':'' }}" href="{{ route('admin.newsletter.index') }}"><x-icon name="mail" size="18" /><span>Newsletter</span></a>
             </div>
 

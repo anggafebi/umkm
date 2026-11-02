@@ -60,10 +60,19 @@ class ConsultationController extends Controller
         $request->session()->forget('consultation_token');
         ConsultationNotifications::forStaff($lead);
         try {
-            $message = "Ada konsultasi baru: {$lead->reference}\n\nProduk: {$lead->product_label}\nNama: {$lead->name}\nBisnis: ".($lead->business_name ?: '-')."\nWhatsApp: {$lead->phone}\nEmail: {$lead->email}\nKebutuhan: {$lead->message}";
-            $whatsapp->sendMessage($message);
+            $response = $whatsapp->sendConsultationNotification($lead);
+            if (!$response->successful()) {
+                Log::warning('Konsultasi tersimpan, tetapi notifikasi WhatsApp gagal dikirim.', [
+                    'lead_id' => $lead->id,
+                    'http_status' => $response->status(),
+                ]);
+            }
         } catch (\Throwable $exception) {
-            Log::warning('Lead tersimpan, notifikasi WhatsApp tidak dikirim.', ['lead_id' => $lead->id, 'error' => $exception->getMessage()]);
+            // Kegagalan WhatsApp tidak membatalkan konsultasi yang sudah tersimpan.
+            Log::warning('Konsultasi tersimpan, notifikasi WhatsApp tidak terkirim.', [
+                'lead_id' => $lead->id,
+                'error' => $exception->getMessage(),
+            ]);
         }
         return redirect()->route('client.consultations.show', ['consultation' => $lead->id])
             ->with('success', "Konsultasi berhasil dikirim. Nomor referensi: {$lead->reference}.");

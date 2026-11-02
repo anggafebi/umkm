@@ -5,6 +5,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Consultation;
 use App\Models\SystemNotification;
 use App\Support\ConsultationNotifications;
+use App\Services\WhatsAppService;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -47,7 +49,7 @@ class AccountController extends Controller
         return view('client.consultation-detail', compact('consultation', 'replyToken'));
     }
 
-    public function reply(Request $request, Consultation $consultation)
+    public function reply(Request $request, Consultation $consultation, WhatsAppService $whatsapp)
     {
         abort_unless($consultation->user_id === $request->user()->id, 404);
         $data = $request->validate([
@@ -71,6 +73,23 @@ class AccountController extends Controller
             ]);
             ConsultationNotifications::forStaffReply($locked);
         });
+
+        // Pesan sudah tersimpan. Kegagalan WhatsApp tidak membatalkan balasan client.
+        try {
+            $response = $whatsapp->sendClientReplyNotification($consultation->fresh(), trim($data['body']));
+            if (!$response->successful()) {
+                Log::warning('Balasan client tersimpan, tetapi notifikasi WhatsApp gagal dikirim.', [
+                    'consultation_id' => $consultation->id,
+                    'http_status' => $response->status(),
+                ]);
+            }
+        } catch (\Throwable $exception) {
+            Log::warning('Balasan client tersimpan, notifikasi WhatsApp tidak terkirim.', [
+                'consultation_id' => $consultation->id,
+                'error' => $exception->getMessage(),
+            ]);
+        }
+
         $request->session()->forget('consultation_reply_token_'.$consultation->id);
         return redirect()->route('client.consultations.show', $consultation)->with('success', 'Balasan berhasil dikirim, admin akan melihat pesan Anda.');
     }

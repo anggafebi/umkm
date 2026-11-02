@@ -25,7 +25,6 @@ class ConsultationController extends Controller
 
     public function store(Request $request, WhatsAppService $whatsapp)
     {
-        $registered = $request->user()?->role === 'client' && $request->user()->is_active;
         $rules = [
             'business_name' => 'nullable|string|max:160',
             'product_id' => 'nullable|integer|exists:products,id',
@@ -35,19 +34,14 @@ class ConsultationController extends Controller
             'message' => 'required|string|max:5000',
             'submission_token' => 'required|uuid',
         ];
-        if (!$registered) {
-            $rules += ['name' => 'required|string|max:120', 'phone' => 'required|string|max:40', 'email' => 'required|email|max:160'];
-        }
         $data = $request->validate($rules);
         if (!hash_equals((string) $request->session()->get('consultation_token', ''), $data['submission_token'])) {
             throw ValidationException::withMessages(['message' => 'Form ini sudah digunakan atau sesi kedaluwarsa. Muat ulang halaman konsultasi.']);
         }
-        if ($registered) {
-            $data['name'] = $request->user()->name;
-            $data['phone'] = $request->user()->phone;
-            $data['email'] = $request->user()->email;
-            $data['user_id'] = $request->user()->id;
-        }
+        $data['name'] = $request->user()->name;
+        $data['phone'] = $request->user()->phone;
+        $data['email'] = $request->user()->email;
+        $data['user_id'] = $request->user()->id;
         if (($data['service_interest'] ?? null) === 'Lainnya') {
             $data['service_interest'] = 'Lainnya: '.trim($data['service_interest_other']);
         }
@@ -71,7 +65,7 @@ class ConsultationController extends Controller
         } catch (\Throwable $exception) {
             Log::warning('Lead tersimpan, notifikasi WhatsApp tidak dikirim.', ['lead_id' => $lead->id, 'error' => $exception->getMessage()]);
         }
-        return redirect()->route($registered ? 'client.consultations.show' : 'consultation', $registered ? ['consultation' => $lead->id] : [])
+        return redirect()->route('client.consultations.show', ['consultation' => $lead->id])
             ->with('success', "Konsultasi berhasil dikirim. Nomor referensi: {$lead->reference}.");
     }
 }

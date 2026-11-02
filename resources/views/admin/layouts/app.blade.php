@@ -29,6 +29,7 @@
             <div class="admin-nav-group">
                 <p class="admin-nav-label">Ringkasan</p>
                 <a class="{{ request()->routeIs('admin.dashboard')?'active':'' }}" href="{{ route('admin.dashboard') }}"><x-icon name="layout-dashboard" size="18" /><span>Dashboard</span></a>
+                <a class="{{ request()->routeIs('admin.orders.*')?'active':'' }}" href="{{ route('admin.orders.index') }}"><x-icon name="shopping-bag" size="18" /><span>Pesanan Client</span></a>
                 <a class="{{ request()->routeIs('admin.consultations.*')?'active':'' }}" href="{{ route('admin.consultations.index') }}"><x-icon name="message-square" size="18" /><span>Leads & Konsultasi</span>@php($unreadLeads = \App\Models\SystemNotification::where('user_id', auth()->id())->whereIn('type', ['consultation_new', 'consultation_client_reply'])->whereNull('read_at')->count())@if($unreadLeads)<span class="status new" aria-label="{{ $unreadLeads }} konsultasi baru">{{ $unreadLeads }}</span>@endif</a>
                 <a class="{{ request()->routeIs('admin.newsletter.*')?'active':'' }}" href="{{ route('admin.newsletter.index') }}"><x-icon name="mail" size="18" /><span>Newsletter</span></a>
             </div>

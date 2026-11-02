@@ -20,6 +20,8 @@ class AccountController extends Controller
         $user = $request->user();
         return view('client.dashboard', [
             'total' => $user->consultations()->count(),
+            'orderTotal' => $user->orders()->count(),
+            'latestOrder' => $user->orders()->latest()->first(),
             'latest' => $user->consultations()->latest()->first(),
             'notifications' => $user->notifications()->latest()->limit(10)->get(),
             'unread' => $user->notifications()->whereNull('read_at')->count(),

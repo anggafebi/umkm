@@ -38,7 +38,12 @@
                 @if($product->price !== null && (float)$product->price > 0)<p class="form-hint">Harga awal. Total biaya dapat berubah sesuai fitur dan kebutuhan.</p>@endif
                 <p>{{ $product->description }}</p>
                 <div class="hero-actions product-detail-actions">
-                    <a class="button-primary" href="{{ route('consultation', ['produk' => $product->slug]) }}">Tanyakan produk <x-icon name="arrow-right" size="17" /></a>
+                    @if($product->price !== null && (float) $product->price > 0 && !$product->price_is_starting_at)
+                        <a class="button-primary" href="{{ route('orders.checkout', $product) }}">Pesan Sekarang <x-icon name="arrow-right" size="17" /></a>
+                    @else
+                        <a class="button-primary" href="{{ route('orders.custom', ['product_id' => $product->id]) }}">Ajukan Pemesanan <x-icon name="arrow-right" size="17" /></a>
+                    @endif
+                    <a class="button-secondary" href="{{ route('consultation', ['produk' => $product->slug]) }}">Konsultasikan Produk</a>
                     
 
 @if($demoSlug)

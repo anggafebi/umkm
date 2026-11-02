@@ -13,9 +13,13 @@ use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\OrderController;
 
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function(){
     Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
+    Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::put('orders/{order}', [OrderController::class, 'update'])->name('orders.update');
     Route::resource('services',ServiceController::class)->only(['index','store','update','destroy']);
     Route::resource('products',ProductController::class)->only(['index','store','update','destroy']);
     Route::resource('portfolio',PortfolioController::class)->only(['index','store','update','destroy']);

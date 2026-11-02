@@ -19,6 +19,7 @@ class User extends Authenticatable
 
     public function consultations() { return $this->hasMany(Consultation::class); }
     public function notifications() { return $this->hasMany(SystemNotification::class); }
+    public function orders() { return $this->hasMany(ClientOrder::class); }
 
     protected $hidden = [
         'password',

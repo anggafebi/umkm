@@ -1,0 +1,11 @@
+
+/* Status khusus pada daftar pesanan client */
+.order-status-cancelled {
+    background: #fee2e2 !important;
+    color: #b91c1c !important;
+}
+.order-status-approved,
+.order-status-completed {
+    background: #dcfce7 !important;
+    color: #166534 !important;
+}

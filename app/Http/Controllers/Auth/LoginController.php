@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
+use App\Models\Consultation;
 use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
@@ -39,6 +40,17 @@ class LoginController extends Controller
             }
             RateLimiter::clear($key);
             $request->session()->regenerate();
+
+            // Hubungkan konsultasi guest dari sesi ini ke akun dengan email yang sama.
+            $pendingConsultationIds = $request->session()->get('guest_consultation_ids', []);
+            if (Auth::user()->role === 'client' && !empty($pendingConsultationIds)) {
+                Consultation::whereIn('id', $pendingConsultationIds)
+                    ->whereNull('user_id')
+                    ->where('email', Auth::user()->email)
+                    ->update(['user_id' => Auth::id()]);
+                $request->session()->forget('guest_consultation_ids');
+            }
+
             return Auth::user()->role === 'client'
                 ? redirect()->route('client.dashboard')
                 : redirect()->intended(route('admin.dashboard'));

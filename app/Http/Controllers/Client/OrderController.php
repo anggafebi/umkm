@@ -20,10 +20,17 @@ class OrderController extends Controller
     public function storeFixed(Request $request, Product $product)
     {
         abort_if($product->price === null || (float) $product->price <= 0 || $product->price_is_starting_at, 404);
-        $data = $request->validate(['client_notes' => 'nullable|string|max:2000']);
+        $rules = ['client_notes' => 'nullable|string|max:2000'];
+        if (!$request->user()) {
+            $rules += ['guest_name' => 'required|string|max:120', 'guest_email' => 'required|email|max:160', 'guest_phone' => 'required|string|max:40'];
+        }
+        $data = $request->validate($rules);
         $order = ClientOrder::create([
             'order_number' => 'AD-'.now()->format('ymd').'-'.Str::upper(Str::random(6)),
-            'user_id' => $request->user()->id,
+            'user_id' => $request->user()?->id,
+            'guest_name' => $data['guest_name'] ?? $request->user()?->name,
+            'guest_email' => $data['guest_email'] ?? $request->user()?->email,
+            'guest_phone' => $data['guest_phone'] ?? $request->user()?->phone,
             'product_id' => $product->id,
             'product_name' => $product->name,
             'order_type' => 'fixed',
@@ -32,7 +39,7 @@ class OrderController extends Controller
             'status' => 'pending',
         ]);
         $this->notifyAdmins($order, 'Pesanan produk baru', "{$order->order_number} — {$order->product_name}");
-        return redirect()->route('client.orders.show', $order)->with('success', 'Pesanan berhasil diajukan. Admin akan menindaklanjutinya.');
+        return $this->afterSubmission($request, $order, 'Pesanan berhasil diajukan. Admin akan menindaklanjutinya.');
     }
 
     public function customForm(Request $request)
@@ -44,7 +51,7 @@ class OrderController extends Controller
 
     public function storeCustom(Request $request)
     {
-        $data = $request->validate([
+        $rules = [
             'product_id' => 'nullable|exists:products,id',
             'service_type' => 'required|string|max:160',
             'project_name' => 'required|string|max:160',
@@ -52,11 +59,18 @@ class OrderController extends Controller
             'requested_features' => 'nullable|string|max:5000',
             'budget' => 'nullable|string|max:100',
             'client_notes' => 'nullable|string|max:2000',
-        ]);
+        ];
+        if (!$request->user()) {
+            $rules += ['guest_name' => 'required|string|max:120', 'guest_email' => 'required|email|max:160', 'guest_phone' => 'required|string|max:40'];
+        }
+        $data = $request->validate($rules);
         $product = !empty($data['product_id']) ? Product::findOrFail($data['product_id']) : null;
         $order = ClientOrder::create([
             'order_number' => 'AD-'.now()->format('ymd').'-'.Str::upper(Str::random(6)),
-            'user_id' => $request->user()->id,
+            'user_id' => $request->user()?->id,
+            'guest_name' => $data['guest_name'] ?? $request->user()?->name,
+            'guest_email' => $data['guest_email'] ?? $request->user()?->email,
+            'guest_phone' => $data['guest_phone'] ?? $request->user()?->phone,
             'product_id' => $product?->id,
             'product_name' => $product?->name ?: $data['service_type'],
             'order_type' => 'custom',
@@ -69,7 +83,17 @@ class OrderController extends Controller
             'status' => 'review',
         ]);
         $this->notifyAdmins($order, 'Pengajuan pesanan custom baru', "{$order->order_number} — {$order->project_name}");
-        return redirect()->route('client.orders.show', $order)->with('success', 'Pengajuan pemesanan berhasil dikirim. Admin akan meninjau kebutuhan Anda.');
+        return $this->afterSubmission($request, $order, 'Pengajuan pemesanan berhasil dikirim. Admin akan meninjau kebutuhan Anda.');
+    }
+
+    private function afterSubmission(Request $request, ClientOrder $order, string $message)
+    {
+        if ($request->user()) {
+            return redirect()->route('client.orders.show', $order)->with('success', $message);
+        }
+        $pending = collect(session('guest_order_ids', []))->push($order->id)->unique()->values()->all();
+        session(['guest_order_ids' => $pending]);
+        return redirect()->route('register')->with('success', 'Pengajuan berhasil dikirim. Buat akun klien untuk memantau pesanan Anda.');
     }
 
     public function index(Request $request)
@@ -88,10 +112,7 @@ class OrderController extends Controller
     {
         abort_unless($order->user_id === $request->user()->id && $order->order_type === 'custom' && $order->status === 'awaiting_approval', 404);
         $data = $request->validate(['decision' => 'required|in:accept,revision']);
-        $order->update([
-            'status' => $data['decision'] === 'accept' ? 'approved' : 'review',
-            'offer_responded_at' => now(),
-        ]);
+        $order->update(['status' => $data['decision'] === 'accept' ? 'approved' : 'review', 'offer_responded_at' => now()]);
         $title = $data['decision'] === 'accept' ? 'Penawaran pesanan disetujui client' : 'Client meminta revisi penawaran';
         $body = "{$order->order_number} — {$order->owner->name}";
         \App\Models\User::whereIn('role', ['admin', 'editor'])->get()->each(function ($admin) use ($title, $body) {
@@ -102,7 +123,7 @@ class OrderController extends Controller
 
     private function notifyAdmins(ClientOrder $order, string $title, string $body): void
     {
-        \App\Models\User::whereIn('role', ['admin', 'editor'])->get()->each(function ($admin) use ($order, $title, $body) {
+        \App\Models\User::whereIn('role', ['admin', 'editor'])->get()->each(function ($admin) use ($title, $body) {
             SystemNotification::create(['user_id' => $admin->id, 'type' => 'order_new', 'title' => $title, 'body' => $body]);
         });
     }

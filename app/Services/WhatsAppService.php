@@ -12,13 +12,12 @@ class WhatsAppService
 {
     /**
      * Notifikasi saat client membuat konsultasi baru.
-     * Driver dipilih melalui WHATSAPP_DRIVER (wakita atau cloud).
+     * Driver: wakita atau cloud.
      */
     public function sendConsultationNotification(Consultation $consultation): Response
     {
         if (config('services.whatsapp.driver', 'wakita') === 'wakita') {
-            return $this->sendWakitaText(
-                (string) config('services.wakita.admin_number'),
+            return $this->sendWakitaToAdmins(
                 $this->buildNewConsultationMessage($consultation)
             );
         }
@@ -34,8 +33,10 @@ class WhatsAppService
     /**
      * Notifikasi saat client membalas tiket konsultasi.
      */
-    public function sendClientReplyNotification(Consultation $consultation, string $message): Response
-    {
+    public function sendClientReplyNotification(
+        Consultation $consultation,
+        string $message
+    ): Response {
         if (config('services.whatsapp.driver', 'wakita') === 'wakita') {
             $text = implode("\n", [
                 "💬 *BALASAN KONSULTASI BARU*",
@@ -50,13 +51,11 @@ class WhatsAppService
                 "Silakan periksa dashboard admin untuk menanggapi.",
             ]);
 
-            return $this->sendWakitaText(
-                (string) config('services.wakita.admin_number'),
-                $text
-            );
+            return $this->sendWakitaToAdmins($text);
         }
 
         $templateName = config('services.whatsapp.reply_template_name');
+
         if (!$templateName) {
             throw new RuntimeException(
                 'WHATSAPP_REPLY_TEMPLATE_NAME belum diatur untuk WhatsApp Cloud API.'
@@ -72,44 +71,128 @@ class WhatsAppService
     }
 
     /**
-     * Mengirim pesan teks melalui WaKita REST API.
-     * Endpoint dan field mengikuti dokumentasi WaKita v1.4.3:
-     * POST /api/v1/send, JSON: number, message.
+     * Mengirim notifikasi ke seluruh nomor admin.
      */
-    public function sendWakitaText(string $number, string $message): Response
+    private function sendWakitaToAdmins(string $message): Response
     {
-        $baseUrl = rtrim((string) config('services.wakita.base_url'), '/');
+        $adminNumbers = config('services.wakita.admin_numbers', []);
+
+        if (empty($adminNumbers)) {
+            throw new RuntimeException(
+                'Nomor admin WaKita belum dikonfigurasi. Periksa WAKITA_ADMIN_NUMBERS.'
+            );
+        }
+
+        $lastResponse = null;
+        $success = false;
+
+        foreach ($adminNumbers as $number) {
+            try {
+                $response = $this->sendWakitaText(
+                    (string) $number,
+                    $message
+                );
+
+                if (
+                    $response->successful()
+                    && ($response->json('success') ?? false)
+                ) {
+                    $success = true;
+                } else {
+                    Log::warning(
+                        'WaKita gagal mengirim notifikasi ke admin.',
+                        [
+                            'to' => $number,
+                            'status' => $response->status(),
+                            'response' => $response->json(),
+                        ]
+                    );
+                }
+
+                $lastResponse = $response;
+
+            } catch (\Throwable $e) {
+                Log::error(
+                    'Terjadi kesalahan saat mengirim notifikasi WaKita.',
+                    [
+                        'to' => $number,
+                        'error' => $e->getMessage(),
+                    ]
+                );
+            }
+        }
+
+        if ($success && $lastResponse !== null) {
+            return $lastResponse;
+        }
+
+        if ($lastResponse !== null) {
+            return $lastResponse;
+        }
+
+        throw new RuntimeException(
+            'Notifikasi WhatsApp gagal dikirim ke seluruh admin.'
+        );
+    }
+
+    /**
+     * Mengirim pesan teks melalui WaKita REST API.
+     * POST /api/v1/send
+     * JSON: number, message.
+     */
+    public function sendWakitaText(
+        string $number,
+        string $message
+    ): Response {
+        $baseUrl = rtrim(
+            (string) config('services.wakita.base_url'),
+            '/'
+        );
+
         $apiKey = (string) config('services.wakita.api_key');
+
         $number = preg_replace('/\D+/', '', $number) ?? '';
 
         if ($baseUrl === '' || $apiKey === '' || $number === '') {
             throw new RuntimeException(
-                'Konfigurasi WaKita belum lengkap. Periksa WAKITA_BASE_URL, WAKITA_API_KEY, dan WAKITA_ADMIN_NUMBER.'
+                'Konfigurasi WaKita belum lengkap. Periksa WAKITA_BASE_URL, WAKITA_API_KEY, dan WAKITA_ADMIN_NUMBERS.'
             );
         }
 
         $response = Http::acceptJson()
-            ->withHeaders(['X-API-Key' => $apiKey])
+            ->withHeaders([
+                'X-API-Key' => $apiKey,
+            ])
             ->timeout(20)
             ->post($baseUrl . '/send', [
                 'number' => $number,
                 'message' => $message,
             ]);
 
-        if (!$response->successful() || !($response->json('success') ?? false)) {
-            Log::warning('WaKita gagal mengirim pesan WhatsApp.', [
-                'http_status' => $response->status(),
-                'error' => $response->json('error'),
-                'message' => $response->json('message'),
-                'to' => $number,
-            ]);
+        if (
+            !$response->successful()
+            || !($response->json('success') ?? false)
+        ) {
+            Log::warning(
+                'WaKita gagal mengirim pesan WhatsApp.',
+                [
+                    'http_status' => $response->status(),
+                    'error' => $response->json('error'),
+                    'message' => $response->json('message'),
+                    'to' => $number,
+                ]
+            );
         }
 
         return $response;
     }
 
-    private function buildNewConsultationMessage(Consultation $consultation): string
-    {
+    /**
+     * Membuat format pesan konsultasi baru.
+     */
+    private function buildNewConsultationMessage(
+        Consultation $consultation
+    ): string {
         $lines = [
             '🔔 *PEMBERITAHUAN KONSULTASI BARU*',
             '',
@@ -142,7 +225,12 @@ class WhatsAppService
 
         $lines[] = '';
         $lines[] = '📝 Keperluan konsultasi:';
-        $lines[] = mb_substr(trim((string) $consultation->message), 0, 2500);
+        $lines[] = mb_substr(
+            trim((string) $consultation->message),
+            0,
+            2500
+        );
+
         $lines[] = '';
         $lines[] = '🔑 Kode Konsultasi: ' . $consultation->reference;
         $lines[] = '';
@@ -153,7 +241,8 @@ class WhatsAppService
     }
 
     /**
-     * Integrasi WhatsApp Cloud API lama tetap tersedia jika driver=cloud.
+     * Integrasi WhatsApp Cloud API lama.
+     * Tetap menggunakan satu nomor penerima.
      */
     private function sendCloudTemplate(
         Consultation $consultation,
@@ -174,7 +263,9 @@ class WhatsAppService
         }
 
         if (!$templateName) {
-            throw new RuntimeException('Nama template WhatsApp belum diatur di file .env.');
+            throw new RuntimeException(
+                'Nama template WhatsApp belum diatur di file .env.'
+            );
         }
 
         $payload = [
@@ -183,14 +274,32 @@ class WhatsAppService
             'type' => 'template',
             'template' => [
                 'name' => $templateName,
-                'language' => ['code' => $language],
+                'language' => [
+                    'code' => $language,
+                ],
                 'components' => [[
                     'type' => 'body',
                     'parameters' => [
-                        ['type' => 'text', 'text' => $consultation->reference],
-                        ['type' => 'text', 'text' => $consultation->name],
-                        ['type' => 'text', 'text' => $consultation->product_label],
-                        ['type' => 'text', 'text' => mb_substr(trim($message), 0, 900)],
+                        [
+                            'type' => 'text',
+                            'text' => $consultation->reference,
+                        ],
+                        [
+                            'type' => 'text',
+                            'text' => $consultation->name,
+                        ],
+                        [
+                            'type' => 'text',
+                            'text' => $consultation->product_label,
+                        ],
+                        [
+                            'type' => 'text',
+                            'text' => mb_substr(
+                                trim($message),
+                                0,
+                                900
+                            ),
+                        ],
                     ],
                 ]],
             ],
@@ -199,15 +308,21 @@ class WhatsAppService
         $response = Http::withToken($token)
             ->timeout(15)
             ->retry(2, 500, throw: false)
-            ->post("https://graph.facebook.com/{$version}/{$phoneId}/messages", $payload);
+            ->post(
+                "https://graph.facebook.com/{$version}/{$phoneId}/messages",
+                $payload
+            );
 
         if (!$response->successful()) {
-            Log::error("WhatsApp Cloud API gagal mengirim notifikasi {$event}.", [
-                'consultation_id' => $consultation->id,
-                'event' => $event,
-                'status' => $response->status(),
-                'response' => $response->json(),
-            ]);
+            Log::error(
+                "WhatsApp Cloud API gagal mengirim notifikasi {$event}.",
+                [
+                    'consultation_id' => $consultation->id,
+                    'event' => $event,
+                    'status' => $response->status(),
+                    'response' => $response->json(),
+                ]
+            );
         }
 
         return $response;

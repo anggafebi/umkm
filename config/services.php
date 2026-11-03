@@ -14,8 +14,11 @@ return [
     ],
 
     'wakita' => [
-        'base_url' => env('WAKITA_BASE_URL', 'https://wakita.aminsproject.com/api/v1'),
-        'api_key' => env('WAKITA_API_KEY'),
-        'admin_number' => env('WAKITA_ADMIN_NUMBER', '6285136028771'),
-    ],
+    'base_url' => env('WAKITA_BASE_URL', 'https://wakita.aminsproject.com/api/v1'),
+    'api_key' => env('WAKITA_API_KEY'),
+
+    'admin_numbers' => array_values(array_filter(
+        array_map('trim', explode(',', env('WAKITA_ADMIN_NUMBERS', '')))
+    )),
+],
 ];

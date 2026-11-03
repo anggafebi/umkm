@@ -4,6 +4,8 @@
 @section('content')
 <section class="page-hero"><div class="container"><span class="section-kicker">AKUN CLIENT</span><h1>Daftar Akun</h1><p>Untuk mengajukan konsultasi dan pemesanan serta memantau perkembangannya.</p></div></section>
 <section class="modern-section"><div class="container client-area"><div class="modern-card client-form-card"><h2>Pendaftaran Client</h2>
+@if(session('success'))<div class="alert alert-success" role="status">{{ session('success') }}</div>@endif
+@if(session('guest_order_ids') || session('guest_consultation_ids'))<p class="form-hint">Gunakan alamat email yang sama dengan formulir konsultasi atau pengajuan agar data otomatis terhubung ke akun ini.</p>@endif
 @if($errors->any())<div class="form-error" role="alert">@foreach($errors->all() as $error)<p>{{ $error }}</p>@endforeach</div>@endif
 <form method="POST" action="{{ route('register.submit') }}" class="contact-form">@csrf
 <label class="form-field">Nama lengkap *<input name="name" value="{{ old('name') }}" required autocomplete="name"></label>

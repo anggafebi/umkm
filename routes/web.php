@@ -32,12 +32,16 @@ Route::post('/kontak',[ContactController::class,'store'])->name('contact.store')
 
 Route::post('/newsletter',[NewsletterController::class,'store'])->name('newsletter.store');
 Route::middleware(['auth', 'client'])->group(function () {
-    Route::get('/konsultasi', [ConsultationController::class, 'index'])->name('consultation');
-    Route::post('/konsultasi', [ConsultationController::class, 'store'])->name('consultation.store');
     Route::get('/produk/{product:slug}/checkout', [OrderController::class, 'checkout'])->name('orders.checkout');
-    Route::post('/produk/{product:slug}/checkout', [OrderController::class, 'storeFixed'])->name('orders.store-fixed');
+    Route::post('/produk/{product:slug}/checkout', [OrderController::class, 'storeFixed'])->middleware('throttle:10,1')->name('orders.store-fixed');
     Route::get('/pesan-custom', [OrderController::class, 'customForm'])->name('orders.custom');
-    Route::post('/pesan-custom', [OrderController::class, 'storeCustom'])->name('orders.store-custom');
+    Route::post('/pesan-custom', [OrderController::class, 'storeCustom'])->middleware('throttle:10,1')->name('orders.store-custom');
+});
+
+Route::get('/konsultasi', [ConsultationController::class, 'index'])->name('consultation');
+Route::post('/konsultasi', [ConsultationController::class, 'store'])->middleware('throttle:8,1')->name('consultation.store');
+
+Route::middleware(['auth', 'client'])->group(function () {
     Route::get('/akun/pesanan', [OrderController::class, 'index'])->name('client.orders.index');
     Route::get('/akun/pesanan/{order}', [OrderController::class, 'show'])->name('client.orders.show');
     Route::post('/akun/pesanan/{order}/penawaran', [OrderController::class, 'respondOffer'])->name('client.orders.respond');

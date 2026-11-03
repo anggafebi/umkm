@@ -61,8 +61,8 @@
                                 <small>{{ $order->created_at->format('d/m/Y H:i') }}</small>
                             </td>
                             <td>
-                                <strong>{{ $order->owner?->name ?? '-' }}</strong>
-                                <small>{{ $order->owner?->email }}</small>
+                                <strong>{{ $order->owner?->name ?? $order->guest_name ?? 'Pengunjung' }}</strong>
+                                <small>{{ $order->owner?->email ?? $order->guest_email }}</small>
                             </td>
                             <td>{{ $order->product_name }}</td>
                             <td>{{ $order->order_type === 'fixed' ? 'Harga tetap' : 'Custom' }}</td>

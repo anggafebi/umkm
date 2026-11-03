@@ -6,6 +6,12 @@
 <section class="modern-section"><div class="container client-area"><div class="modern-card client-form-card">
 @if($errors->any())<div class="form-error">@foreach($errors->all() as $error)<p>{{ $error }}</p>@endforeach</div>@endif
 <form method="POST" action="{{ route('orders.store-custom') }}" class="contact-form">@csrf
+@guest
+<label class="form-field">Nama lengkap *<input name="guest_name" value="{{ old('guest_name') }}" required maxlength="120"></label>
+<label class="form-field">Email *<input type="email" name="guest_email" value="{{ old('guest_email') }}" required maxlength="160"></label>
+<label class="form-field">Nomor WhatsApp *<input name="guest_phone" value="{{ old('guest_phone') }}" required maxlength="40"></label>
+<p class="form-hint">Anda dapat mengirim pengajuan tanpa login. Setelah berhasil, Anda akan diarahkan membuat akun klien untuk memantau pesanan.</p>
+@endguest
 @if($product)<div class="info-box-public"><strong>Produk / layanan terkait</strong><p>{{ $product->name }}</p></div><input type="hidden" name="product_id" value="{{ $product->id }}">@endif
 <label class="form-field">Jenis layanan *<input name="service_type" value="{{ old('service_type', $serviceName) }}" required maxlength="160"></label>
 <label class="form-field">Nama proyek *<input name="project_name" value="{{ old('project_name') }}" required maxlength="160"></label>

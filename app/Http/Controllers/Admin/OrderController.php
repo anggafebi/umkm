@@ -32,12 +32,14 @@ class OrderController extends Controller
             return back()->withErrors(['status' => 'Pesanan harga tetap tidak memerlukan tahap penawaran custom.']);
         }
         $order->update($data);
-        SystemNotification::create([
-            'user_id' => $order->user_id,
-            'type' => 'order_updated',
-            'title' => 'Status pesanan diperbarui',
-            'body' => "Pesanan {$order->order_number} diperbarui menjadi ".str_replace('_', ' ', $data['status']).'.',
-        ]);
+        if ($order->user_id) {
+            SystemNotification::create([
+                'user_id' => $order->user_id,
+                'type' => 'order_updated',
+                'title' => 'Status pesanan diperbarui',
+                'body' => "Pesanan {$order->order_number} diperbarui menjadi ".str_replace('_', ' ', $data['status']).'.',
+            ]);
+        }
         return back()->with('success', 'Pesanan berhasil diperbarui.');
     }
 }
